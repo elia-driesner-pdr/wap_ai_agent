@@ -1,0 +1,27 @@
+<div class="d-flex justify-content-center" style="bottom: 10vh;">
+    <div class="chat-container w-100" style="max-width: 80vw;">
+        <div class="chat">
+            @for(message of messages; track message) {
+                <div class="chat-message {{ message.type }}">
+                    {{ message.text }}
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<form class="position-fixed start-0 end-0 p-3" style="bottom: 10vh;">
+    <div class="container">
+        <div class="input-group">
+            <input 
+                type="text" 
+                class="form-control" 
+                name="promt"
+                placeholder="Wobei benötigen sie Hilfe?"
+            >
+            <button class="btn btn-dark" type="button">
+                <i class="fa fa-arrow-up"></i>
+            </button>
+        </div>
+    </div>
+</form>

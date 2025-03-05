@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { InputFieldComponent } from './input-field/input-field.component';
 import { HeaderComponent } from './header/header.component';
+import { ChatComponent } from './chat/chat.component';
 
 @Component({
   selector: 'app-root',
   imports: [
-    InputFieldComponent,
-    HeaderComponent
+    HeaderComponent,
+    ChatComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
