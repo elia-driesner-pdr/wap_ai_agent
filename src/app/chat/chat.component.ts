@@ -12,10 +12,7 @@ import { AiRequestService } from '../ai-request.service';
   styleUrl: './chat.component.css'
 })
 export class ChatComponent {
-  messages : any = [
-    {'text': 'Hello, how can I help you?', 'type': 'recieved', 'uid': 0},
-    {'text': 'Hello ...', 'type': 'sent', 'uid': 1},
-  ];
+  messages : any = [];
 
   textFieldValue : string = '';
   message : string = '';

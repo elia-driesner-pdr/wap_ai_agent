@@ -1,5 +1,5 @@
 header {
-    background-color: #202020;
+    background-color: #003e70;
     margin: 0;
     padding: 10px;
     display: flex;
@@ -13,4 +13,10 @@ header {
     font-size: 2.3rem;
     margin: 0;
     order: 1;
+}
+
+#branding {
+    margin-left: 1vw;
+    margin-right: 5vw;
+    height: 50px;
 }
