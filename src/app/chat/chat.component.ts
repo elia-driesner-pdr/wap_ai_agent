@@ -19,7 +19,7 @@ export class ChatComponent {
 
   textFieldValue : string = '';
   message : string = '';
-  buttonDisabled : boolean = false;
+  generatingResponse : boolean = false;
   isLoading : boolean = false;
   submitViaEnter : boolean = false;
 
@@ -51,17 +51,17 @@ export class ChatComponent {
 
   displayMessage(msg : string , msgUid : number) : void {
     this.isLoading = false;
-    this.buttonDisabled = false;
 
     let message = this.messages.find((message : any) => message.uid == msgUid);
     let i = 0;
     message.text = '';
     const interval = setInterval(() => {
-      if (i < msg.length) {
+      if (i >= msg.length || this.generatingResponse == false) {
+        clearInterval(interval);
+        this.generatingResponse = false;
+      } else {
         message.text += msg[i];
         i++;
-      } else {
-        clearInterval(interval);
       }
     }, 5);
   }
@@ -84,7 +84,7 @@ export class ChatComponent {
   }
 
   cancelGeneration() : void {
-    this.buttonDisabled = false;
+    this.generatingResponse = false;
     this.isLoading = false;
   }
 
@@ -93,8 +93,9 @@ export class ChatComponent {
       this.message = this.textFieldValue;
       this.textFieldValue = '';
       this.messages.push({'text': this.message, 'type': 'sent', 'uid': this.generateUid()});
+
+      this.generatingResponse = true;
       this.generateResponse();
-      this.buttonDisabled = true;
     } 
   }
 }

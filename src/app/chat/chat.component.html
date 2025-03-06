@@ -19,7 +19,7 @@
             placeholder="Wobei benötigen sie Hilfe?"
             [(ngModel)]="textFieldValue"
         >
-        @if (!buttonDisabled) {
+        @if (!generatingResponse) {
             <button class="btn btn-dark" type="submit">
                 <i class="fa fa-arrow-up"></i>
             </button> 
