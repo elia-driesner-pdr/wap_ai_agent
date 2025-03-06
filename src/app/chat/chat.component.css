@@ -1,5 +1,5 @@
 .chat-container {
-    height: calc(100vh - 20vh); /* Platz für Eingabefeld */
+    height: calc(100vh - 28vh); /* Platz für Eingabefeld */
     overflow-y: auto;
     padding: 1rem;
     border-radius: 10px;
@@ -32,6 +32,16 @@
     align-self: flex-end;
     text-align: right;
     margin-left: auto;
+}
+.cancelled {
+    background-color: #ffffff00;
+    color: black;
+}
+
+.placeholder-text {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 3vh;
 }
 
 .input-field{

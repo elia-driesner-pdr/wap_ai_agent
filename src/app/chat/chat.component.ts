@@ -19,18 +19,36 @@ export class ChatComponent {
   generatingResponse : boolean = false;
   isLoading : boolean = false;
   submitViaEnter : boolean = false;
+  generatingMessageUid : number = 0;
 
   constructor(private aiRequestService: AiRequestService) {}
 
   generateUid() : number {
+    // Generates a uid which is used to identify each message and possibly modify them
     return Math.floor(Math.random() * 1000000);
   }
 
   delay(ms: number) {
+    // Delays by the specified number of ms
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  markAsCancelled(msgUid : number) : void {
+    let message = this.messages.find((message : any) => message.uid == msgUid);
+    message.text = 'Verarbeitung abgebrochen';
+    message.status = 'cancelled';
+  }
+
+  isGenerationCancelled(message : any) : boolean {
+    if(this.generatingResponse == false) {
+      this.markAsCancelled(message);
+      return true;
+    }
+    return false;
+  }
+
   async showLoading(msgUid : number) {
+    // Displays animated dots indicating that the request is processing
     let message = this.messages.find((message : any) => message.uid == msgUid);
     let numDots = 1;
     this.isLoading = true;
@@ -47,10 +65,14 @@ export class ChatComponent {
   }
 
   displayMessage(msg : string , msgUid : number) : void {
+    // Writes out the message character by character, with a 5ms delay inbetween
     this.isLoading = false;
 
     let message = this.messages.find((message : any) => message.uid == msgUid);
     let i = 0;
+
+    if(this.isGenerationCancelled(message)) return;
+
     message.text = '';
     const interval = setInterval(() => {
       if (i >= msg.length || this.generatingResponse == false) {
@@ -64,12 +86,15 @@ export class ChatComponent {
   }
 
   generateResponse() : void {
+    // Calls the loading animation and sends the API request
     var uid = this.generateUid();
-    this.messages.push({'text': '...', 'type': 'recieved', 'uid': uid});
+    this.generatingMessageUid = uid;
+    this.messages.push({'text': '...', 'type': 'recieved', 'uid': uid, 'status': 'normal'});
     this.showLoading(uid)
 
     this.aiRequestService.sendChat(this.message).subscribe(
       (res: any) => {
+        console.log(res)
         if(res['response'] != null) {
           this.displayMessage(res['response'], uid);
         } else {
@@ -81,15 +106,20 @@ export class ChatComponent {
   }
 
   cancelGeneration() : void {
+    // Stops the generation of the response
     this.generatingResponse = false;
     this.isLoading = false;
+    if(this.generatingMessageUid != 0) {
+      this.markAsCancelled(this.generatingMessageUid);
+      this.generatingMessageUid = 0;
+    }
   }
 
   sendMessage() : void {
     if(this.textFieldValue != '') {
       this.message = this.textFieldValue;
       this.textFieldValue = '';
-      this.messages.push({'text': this.message, 'type': 'sent', 'uid': this.generateUid()});
+      this.messages.push({'text': this.message, 'type': 'sent', 'uid': this.generateUid(), 'status': 'normal'});
 
       this.generatingResponse = true;
       this.generateResponse();

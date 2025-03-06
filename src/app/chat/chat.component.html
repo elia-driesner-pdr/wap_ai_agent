@@ -1,22 +1,29 @@
 <div class="d-flex justify-content-center" style="bottom: 10vh;">
     <div class="chat-container w-100" style="max-width: 80vw;">
         <div class="chat">
-            @for(message of messages; track message) {
-                <div class="chat-message {{ message.type }}">
-                    <p class="message-text">{{ message.text }}</p>
-                </div>
+            @if(messages.length > 0) {
+                @for(message of messages; track message) {
+                    <div class="chat-message {{ message.type }} {{ message.status }}">
+                        <p class="message-text">{{ message.text }}</p>
+                    </div>
+                }
+            } @else {
+                <h1 class="placeholder-text">
+                    Wie kann ich dir helfen?
+                </h1>
             }
         </div>
     </div>
 </div>
 
-<form class="position-fixed start-0 end-0 p-3" style="bottom: 10vh;" (submit)="sendMessage()">
+<form class="start-0 end-0 p-3" style="bottom: 10vh;" (submit)="sendMessage()">
     <div class="input-group container">
         <input 
             type="text" 
             class="form-control form-control-lg" 
             name="prompt"
-            placeholder="Wobei benötigen sie Hilfe?"
+            placeholder="Nachricht"
+            autocomplete="off"
             [(ngModel)]="textFieldValue"
         >
         @if (!generatingResponse) {
