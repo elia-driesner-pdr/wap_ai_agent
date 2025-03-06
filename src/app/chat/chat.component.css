@@ -1,5 +1,5 @@
 .chat-container {
-    height: calc(100vh - 25vh); /* Platz für Eingabefeld */
+    height: calc(100vh - 20vh); /* Platz für Eingabefeld */
     overflow-y: auto;
     padding: 1rem;
     border-radius: 10px;
@@ -8,11 +8,17 @@
 }
 
 .chat-message {
+    width: auto;
+    max-width: 70%;
     padding: 0.75rem 1rem;
     border-radius: 20px;
     margin-bottom: 1rem;
     word-break: break-word;
-    max-width: 75%;
+}
+
+.recieved {
+    background-color: #e9ecef;
+    align-self: flex-start;
 }
 
 .sent {

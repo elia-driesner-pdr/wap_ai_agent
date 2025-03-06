@@ -10,18 +10,24 @@
     </div>
 </div>
 
-<form class="position-fixed start-0 end-0 p-3" style="bottom: 10vh;">
-    <div class="container">
-        <div class="input-group">
-            <input 
-                type="text" 
-                class="form-control" 
-                name="promt"
-                placeholder="Wobei benötigen sie Hilfe?"
-            >
-            <button class="btn btn-dark" type="button">
+<form class="position-fixed start-0 end-0 p-3" style="bottom: 10vh;" (submit)="sendMessage()">
+    <div class="input-group container">
+        <input 
+            type="text" 
+            class="form-control" 
+            name="prompt"
+            placeholder="Wobei benötigen sie Hilfe?"
+            [(ngModel)]="text"
+        >
+        @if (!buttonDisabled) {
+            <button class="btn btn-dark" type="submit">
                 <i class="fa fa-arrow-up"></i>
+            </button> 
+        } @else { 
+            <button class="btn btn-dark" type="button" (click)="cancelGeneration();  $event.preventDefault()">
+                <i class="fa fa-stop"></i>
             </button>
-        </div>
+        }
     </div>
 </form>
+  
