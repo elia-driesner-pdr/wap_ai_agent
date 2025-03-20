@@ -1,0 +1,32 @@
+.info-cards-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-cards-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.info-card {
+    margin: 0.5%;
+    text-align: left;
+    border-radius: 20px;
+    flex: 0 0 30.3333%;
+}
+
+.info-card p {
+    font-size: 1.3rem;
+}
+
+.info-card h4 {
+    font-size: 1.6rem;
+    color: #002b4f;
+}
+
+h1 {
+    font-size: 55px;
+    margin-bottom: 50px;
+}

@@ -1,0 +1,16 @@
+<div class="info-cards-container">
+    <h1>
+        Testversion
+    </h1>
+    
+    <div class="info-cards-section">
+        @for(infoCard of infoCards; track infoCard) {
+            <div class="card info-card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title"> {{ infoCard['title'] }} </h4>
+                    <p class="card-text"> {{ infoCard['body'] }} </p>
+                </div>
+            </div>
+        }
+</div>
+

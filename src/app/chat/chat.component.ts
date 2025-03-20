@@ -3,10 +3,13 @@ import { FormsModule } from '@angular/forms';
 
 import { AiRequestService } from '../ai-request.service';
 
+import { InfoCardsComponent } from '../info-cards/info-cards.component';
+
 @Component({
   selector: 'app-chat',
   imports: [
     FormsModule,
+    InfoCardsComponent
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'

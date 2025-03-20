@@ -8,9 +8,7 @@
                     </div>
                 }
             } @else {
-                <h1 class="placeholder-text">
-                    Wie kann ich dir helfen?
-                </h1>
+                <app-info-cards></app-info-cards>
             }
         </div>
     </div>
@@ -20,18 +18,18 @@
     <div class="input-group container">
         <input 
             type="text" 
-            class="form-control form-control-lg" 
+            class="form-control form-control-lg shadow text-field" 
             name="prompt"
             placeholder="Nachricht"
             autocomplete="off"
             [(ngModel)]="textFieldValue"
         >
         @if (!generatingResponse) {
-            <button class="btn btn-dark col-1" type="submit">
+            <button class="btn btn-dark col-1 shadow send-button" type="submit">
                 <i class="fa fa-arrow-up"></i>
             </button> 
         } @else { 
-            <button class="btn btn-dark col-1" type="button" (click)="cancelGeneration();  $event.preventDefault()">
+            <button class="btn btn-dark col-1 shadow send-button" type="button" (click)="cancelGeneration();  $event.preventDefault()">
                 <i class="fa fa-stop"></i>
             </button>
         }
