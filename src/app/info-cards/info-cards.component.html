@@ -5,7 +5,7 @@
     
     <div class="info-cards-section">
         @for(infoCard of infoCards; track infoCard) {
-            <div class="card info-card shadow-sm">
+            <div class="card info-card shadow-sm" (click)="setExampleText(infoCard);">
                 <div class="card-body">
                     <h4 class="card-title"> {{ infoCard['title'] }} </h4>
                     <p class="card-text"> {{ infoCard['body'] }} </p>

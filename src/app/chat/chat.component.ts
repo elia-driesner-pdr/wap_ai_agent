@@ -128,4 +128,9 @@ export class ChatComponent {
       this.generateResponse();
     } 
   }
+
+  setExampleText(cardInfo : object) {
+    console.log('cardInfo');
+    console.log(cardInfo);
+  }
 }
