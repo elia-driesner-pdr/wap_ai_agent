@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { ChatService } from './chat.service';
 import { AiRequestService } from '../ai-request.service';
-
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { InfoCardsComponent } from '../info-cards/info-cards.component';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
   messages : any = [];
 
   textFieldValue : string = '';
@@ -24,12 +24,41 @@ export class ChatComponent {
   submitViaEnter : boolean = false;
   generatingMessageUid : number = 0;
 
-  constructor(private aiRequestService: AiRequestService) {}
+  constructor(private chatService : ChatService) {}
 
-  generateUid() : number {
-    // Generates a uid which is used to identify each message and possibly modify them
-    return Math.floor(Math.random() * 1000000);
+  ngOnInit() {
+    this.chatService.registerCallbacks({
+        setRecievedMessageFunc: this.displayRecievedMessage.bind(this),
+        setSentMessageFunc: this.displaySentMessage.bind(this),
+        initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this)
+    });
   }
+
+  getMsgByUid(uid : number ) {
+    return this.messages.find((message : any) => message.uid == uid);
+  }
+
+  displayRecievedMessage(uid : number, msg : string) : void {
+    let message = this.getMsgByUid(uid);
+    message.text = '';
+    
+    // Write out message in a typewriter animation
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i >= msg.length || this.generatingResponse == false) {
+        clearInterval(interval);
+        this.generatingResponse = false;
+      } else {
+        message.text += msg[i];
+        i++;
+      }
+    }, 5);
+  }
+
+  displaySentMessage(uid : number, msg : string) : void {
+    this.messages.push({'text': msg, 'type': 'sent', 'uid': uid, 'status': 'normal'});
+  }
+
 
   delay(ms: number) {
     // Delays by the specified number of ms
@@ -50,9 +79,11 @@ export class ChatComponent {
     return false;
   }
 
-  async showLoading(msgUid : number) {
-    // Displays animated dots indicating that the request is processing
-    let message = this.messages.find((message : any) => message.uid == msgUid);
+  async initilizeRecievedMessage(uid : number) {
+    // Creates the message object and displays a loading animation
+    this.messages.push({'text': '...', 'type': 'sent', 'uid': uid, 'status': 'normal'});
+    let message = this.getMsgByUid(uid);
+
     let numDots = 1;
     this.isLoading = true;
     while(this.isLoading) {
@@ -65,49 +96,6 @@ export class ChatComponent {
       }
       await this.delay(300);
     }
-  }
-
-  displayMessage(msg : string , msgUid : number) : void {
-    // Writes out the message character by character, with a 5ms delay inbetween
-    this.isLoading = false;
-
-    let message = this.messages.find((message : any) => message.uid == msgUid);
-    let i = 0;
-
-    if(this.isGenerationCancelled(message)) return;
-
-    message.text = '';
-    const interval = setInterval(() => {
-      if (i >= msg.length || this.generatingResponse == false) {
-        clearInterval(interval);
-        this.generatingResponse = false;
-      } else {
-        message.text += msg[i];
-        i++;
-      }
-    }, 5);
-  }
-
-  generateResponse() : void {
-    // Calls the loading animation and sends the API request
-    var uid = this.generateUid();
-    this.generatingMessageUid = uid;
-    this.messages.push({'text': '...', 'type': 'recieved', 'uid': uid, 'status': 'normal'});
-    this.showLoading(uid)
-
-    this.aiRequestService.sendChat(this.message).subscribe({
-      next: (response) => {
-        if(response == null) {
-          this.cancelGeneration(true);
-          return;
-        }
-        if(response['response'] != null) {
-          this.displayMessage(response['response'], uid);
-        } else {
-          this.displayMessage(response, uid);
-        }
-      },
-    });
   }
 
   cancelGeneration(onError = false) : void {
@@ -128,10 +116,9 @@ export class ChatComponent {
     if(this.textFieldValue != '') {
       this.message = this.textFieldValue;
       this.textFieldValue = '';
-      this.messages.push({'text': this.message, 'type': 'sent', 'uid': this.generateUid(), 'status': 'normal'});
 
       this.generatingResponse = true;
-      this.generateResponse();
+      this.chatService.sendMessage(this.message);
     } 
   }
 
