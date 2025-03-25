@@ -20,99 +20,60 @@ export class ChatComponent implements OnInit {
   textFieldValue : string = '';
   message : string = '';
   generatingResponse : boolean = false;
-  isLoading : boolean = false;
-  submitViaEnter : boolean = false;
-  generatingMessageUid : number = 0;
 
   constructor(private chatService : ChatService) {}
 
   ngOnInit() {
+    // Allows ChatService to call functions for editing messages ...
     this.chatService.registerCallbacks({
-        setRecievedMessageFunc: this.displayRecievedMessage.bind(this),
         setSentMessageFunc: this.displaySentMessage.bind(this),
-        initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this)
+        initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
+        cancelGenerationFunc: this.cancelGeneration.bind(this),
+        setMessageTextFunc: this.setMessageText.bind(this)
     });
   }
 
   getMsgByUid(uid : number ) {
+    // Returns a message, found by uid
     return this.messages.find((message : any) => message.uid == uid);
   }
 
-  displayRecievedMessage(uid : number, msg : string) : void {
-    let message = this.getMsgByUid(uid);
-    message.text = '';
-    
-    // Write out message in a typewriter animation
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i >= msg.length || this.generatingResponse == false) {
-        clearInterval(interval);
-        this.generatingResponse = false;
-      } else {
-        message.text += msg[i];
-        i++;
-      }
-    }, 5);
-  }
-
   displaySentMessage(uid : number, msg : string) : void {
+    // Displays the message sent by the user
     this.messages.push({'text': msg, 'type': 'sent', 'uid': uid, 'status': 'normal'});
   }
 
-
-  delay(ms: number) {
-    // Delays by the specified number of ms
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  markAsCancelled(msgUid : number, newMsg : string) : void {
-    let message = this.messages.find((message : any) => message.uid == msgUid);
-    message.text = newMsg;
-    message.status = 'cancelled';
-  }
-
-  isGenerationCancelled(message : any) : boolean {
-    if(this.generatingResponse == false) {
-      this.markAsCancelled(message, 'Verarbeitung abgebrochen');
-      return true;
-    }
-    return false;
+  setMessageText(uid : number, msg : string) {
+    // Edits the text of a message
+    let message = this.getMsgByUid(uid);
+    message.text = msg;
   }
 
   async initilizeRecievedMessage(uid : number) {
-    // Creates the message object and displays a loading animation
-    this.messages.push({'text': '...', 'type': 'sent', 'uid': uid, 'status': 'normal'});
+    // Creates the message object
+    this.messages.push({'text': '...', 'type': 'recieved', 'uid': uid, 'status': 'normal'});
+  }
+
+  cancelGeneration(uid : number, onError = false) : void {
+    // Stops the generation of the response
     let message = this.getMsgByUid(uid);
 
-    let numDots = 1;
-    this.isLoading = true;
-    while(this.isLoading) {
-      if(message) {
-        numDots++;
-        if(numDots > 3) {
-          numDots = 1;
-        }
-        message.text = '...'.substring(0, numDots);
-      }
-      await this.delay(300);
+    this.generatingResponse = false;
+
+    message.status = 'cancelled';
+    if(onError) {
+      message.text = 'Keine Verbindung zum Server';
+    } else {
+      message.text = 'Verarbeitung abgebrochen';
     }
   }
 
-  cancelGeneration(onError = false) : void {
-    // Stops the generation of the response
-    this.generatingResponse = false;
-    this.isLoading = false;
-    if(this.generatingMessageUid != 0) {
-      if(onError) {
-        this.markAsCancelled(this.generatingMessageUid, 'Keine Verbindung zum Server');
-      } else {
-        this.markAsCancelled(this.generatingMessageUid, 'Verarbeitung abgebrochen');
-      }
-      this.generatingMessageUid = 0;
-    }
+  cancel() {
+    this.chatService.cancelResponseGeneration();
   }
 
   sendMessage() : void {
+    // Sends message the ChatService
     if(this.textFieldValue != '') {
       this.message = this.textFieldValue;
       this.textFieldValue = '';
@@ -123,6 +84,7 @@ export class ChatComponent implements OnInit {
   }
 
   setExampleText(cardInfo : any) {
+    // Sets a predefined text in the textfield
     this.textFieldValue = cardInfo['example'];
   }
 }
