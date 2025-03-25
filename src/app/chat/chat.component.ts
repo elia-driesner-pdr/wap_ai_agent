@@ -36,15 +36,15 @@ export class ChatComponent {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  markAsCancelled(msgUid : number) : void {
+  markAsCancelled(msgUid : number, newMsg : string) : void {
     let message = this.messages.find((message : any) => message.uid == msgUid);
-    message.text = 'Verarbeitung abgebrochen';
+    message.text = newMsg;
     message.status = 'cancelled';
   }
 
   isGenerationCancelled(message : any) : boolean {
     if(this.generatingResponse == false) {
-      this.markAsCancelled(message);
+      this.markAsCancelled(message, 'Verarbeitung abgebrochen');
       return true;
     }
     return false;
@@ -95,25 +95,31 @@ export class ChatComponent {
     this.messages.push({'text': '...', 'type': 'recieved', 'uid': uid, 'status': 'normal'});
     this.showLoading(uid)
 
-    this.aiRequestService.sendChat(this.message).subscribe(
-      (res: any) => {
-        console.log(res)
-        if(res['response'] != null) {
-          this.displayMessage(res['response'], uid);
+    this.aiRequestService.sendChat(this.message).subscribe({
+      next: (response) => {
+        if(response == null) {
+          this.cancelGeneration(true);
+          return;
+        }
+        if(response['response'] != null) {
+          this.displayMessage(response['response'], uid);
         } else {
-          this.displayMessage(res, uid);
+          this.displayMessage(response, uid);
         }
       },
-      (err : any) => console.error('Error:', err)
-    );
+    });
   }
 
-  cancelGeneration() : void {
+  cancelGeneration(onError = false) : void {
     // Stops the generation of the response
     this.generatingResponse = false;
     this.isLoading = false;
     if(this.generatingMessageUid != 0) {
-      this.markAsCancelled(this.generatingMessageUid);
+      if(onError) {
+        this.markAsCancelled(this.generatingMessageUid, 'Keine Verbindung zum Server');
+      } else {
+        this.markAsCancelled(this.generatingMessageUid, 'Verarbeitung abgebrochen');
+      }
       this.generatingMessageUid = 0;
     }
   }
