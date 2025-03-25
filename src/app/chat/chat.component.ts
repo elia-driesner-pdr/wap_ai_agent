@@ -129,8 +129,7 @@ export class ChatComponent {
     } 
   }
 
-  setExampleText(cardInfo : object) {
-    console.log('cardInfo');
-    console.log(cardInfo);
+  setExampleText(cardInfo : any) {
+    this.textFieldValue = cardInfo['example'];
   }
 }

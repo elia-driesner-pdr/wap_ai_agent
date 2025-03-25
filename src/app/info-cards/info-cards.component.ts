@@ -28,7 +28,6 @@ export class InfoCardsComponent {
   ];
 
   setExampleText(infoCard : object) {
-    console.log(infoCard);
     this.cardClicked.emit(infoCard)
   }
 }
