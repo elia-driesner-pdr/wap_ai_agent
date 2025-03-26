@@ -29,8 +29,13 @@ export class ChatComponent implements OnInit {
         setSentMessageFunc: this.displaySentMessage.bind(this),
         initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
         cancelGenerationFunc: this.cancelGeneration.bind(this),
-        setMessageTextFunc: this.setMessageText.bind(this)
+        setMessageTextFunc: this.setMessageText.bind(this),
+        responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this)
     });
+  }
+
+  responseGenerationFinished() {
+    this.generatingResponse = false;
   }
 
   getMsgByUid(uid : number ) {
@@ -64,11 +69,13 @@ export class ChatComponent implements OnInit {
     if(onError) {
       message.text = 'Keine Verbindung zum Server';
     } else {
-      message.text = 'Verarbeitung abgebrochen';
+      message.text = 'Verarbeitung abgebrochen (Falls durch die Anfrage Änderungen vorgenommen wurden sind diese nicht zurückgesetzt)';
     }
   }
 
   cancel() {
+    // Stops generation of response
+    this.generatingResponse = false;
     this.chatService.cancelResponseGeneration();
   }
 

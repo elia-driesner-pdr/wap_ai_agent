@@ -10,6 +10,7 @@ export class ChatService {
   private initilizeRecievedMessage?: (uid : number) => void;
   private cancelGeneration?: (uid : number, onError : boolean) => void;
   private setMessageText?: (uid : number, msg : string) => void;
+  private responseGenerationFinished?: () => void;
 
   private isGenerating : boolean = false;
   private shouldCancel : boolean = false;
@@ -18,17 +19,19 @@ export class ChatService {
 
   // Registers all needed Functions from the Chat Component, is called on init
   public registerCallbacks(
-    {setSentMessageFunc, initilizeRecievedMessageFunc, cancelGenerationFunc, setMessageTextFunc} :
+    {setSentMessageFunc, initilizeRecievedMessageFunc, cancelGenerationFunc, setMessageTextFunc, responseGenerationFinishedFunc} :
     {
       setSentMessageFunc : (uid : number, msg : string) => void,
       initilizeRecievedMessageFunc : (uid : number) => void,
       cancelGenerationFunc : (uid : number, onError : boolean) => void,
-      setMessageTextFunc : (uid : number, msg : string) => void
+      setMessageTextFunc : (uid : number, msg : string) => void,
+      responseGenerationFinishedFunc : () => void
     }) : void {
     this.setSentMessage = setSentMessageFunc;
     this.initilizeRecievedMessage = initilizeRecievedMessageFunc;
     this.cancelGeneration = cancelGenerationFunc;
     this.setMessageText = setMessageTextFunc;
+    this.responseGenerationFinished = responseGenerationFinishedFunc
   }
 
   private generateUid() : number {
@@ -52,6 +55,10 @@ export class ChatService {
     // Displays a . .. ... animation
     let numDots = 1;
     while(this.isGenerating) {
+      if(this.shouldCancel == true) {
+        this.cancelGeneration?.(uid, false);
+        return;
+      }
       numDots++;
       if(numDots > 3) {
         numDots = 1;
@@ -66,9 +73,10 @@ export class ChatService {
     let i = 0;
     let displayedText = '';
     const interval = setInterval(() => {
-      if (i >= msg.length || this.shouldCancel == false) {
+      if (i >= msg.length || this.shouldCancel == true) {
         clearInterval(interval);
         this.isGenerating = false;
+        this.responseGenerationFinished?.();
       } else {
         displayedText += msg[i];
         this.setMessageText?.(uid, displayedText);
@@ -87,6 +95,7 @@ export class ChatService {
             this.isGenerating = false;
             return;
           }
+          console.log(response['response']);
           this.displayResponse(uid, response['response'])
         } else {
           this.shouldCancel = false;
