@@ -36,7 +36,7 @@ export class ChatService {
 
   private generateUid() : number {
     // Generates a uid which is used to identify each message and possibly modify them
-    return Math.floor(Math.random() * 1000000);
+    return Math.floor(Math.random() * 100000000);
   }
 
   public sendMessage(msg : string) {
@@ -95,8 +95,12 @@ export class ChatService {
             this.isGenerating = false;
             return;
           }
-          console.log(response['response']);
+
           this.displayResponse(uid, response['response'])
+          if(response['contextId']) {
+            this.aiRequestService.setContextId(response['contextId']);
+          }
+
         } else {
           this.shouldCancel = false;
           this.isGenerating = false;
