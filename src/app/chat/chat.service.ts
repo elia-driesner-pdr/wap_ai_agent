@@ -90,12 +90,11 @@ export class ChatService {
     this.aiRequestService.sendChat(msg).subscribe({
       next: (response) => {
         if(this.shouldCancel == false) {
-          if(response == null) {
+          if(response == null || response['error']) {
             this.cancelGeneration?.(uid, true);
             this.isGenerating = false;
             return;
           }
-
           this.displayResponse(uid, response['response'])
           if(response['contextId']) {
             this.aiRequestService.setContextId(response['contextId']);
@@ -114,5 +113,10 @@ export class ChatService {
     if(this.isGenerating == true && this.shouldCancel == false) {
       this.shouldCancel = true;
     }
+  }
+
+  public deleteChatContext() {
+    // Deletes the context Id
+    this.aiRequestService.setContextId(null);
   }
 }

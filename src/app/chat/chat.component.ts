@@ -94,4 +94,9 @@ export class ChatComponent implements OnInit {
     // Sets a predefined text in the textfield
     this.textFieldValue = cardInfo['example'];
   }
+
+  deleteChatContext() {
+    // Deletes the contextId
+    this.chatService.deleteChatContext();
+  }
 }

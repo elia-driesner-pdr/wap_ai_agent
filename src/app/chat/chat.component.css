@@ -68,11 +68,16 @@
     }
 }
 
-.safetyIcon {
+.data-safety-icons {
     position: fixed;
     margin-top: 20px;
     right: 30px;
     font-size: 25px;
+    display: flex;
+    flex-direction: row;
+}
+
+.safetyIcon {
     color: rgb(0, 163, 0);
 }
 
@@ -90,21 +95,31 @@
     right: 20%;
     opacity: 0;
     transition: opacity 0.3s;
-  }
+}
 
-  .hover-icon{
+.hover-icon{
     display: none;
-  }
-  
-  .safetyIcon:hover .safetyIconText {
+}
+
+.safetyIcon:hover .safetyIconText {
     visibility: visible;
     opacity: 1;
-  }
+}
 
-  .safetyIcon:hover .default-icon {
+.safetyIcon:hover .default-icon {
     display: none;
-  }
+}
 
-  .safetyIcon:hover .hover-icon {
-    display: inline;
-  }
+.safetyIcon:hover .hover-icon {
+    display: inline;    
+}
+
+.delete-context-icon {
+    color: black;
+    margin-right: 10px;
+    transition: color 0.1s;
+}
+
+.delete-context-icon:hover {
+    color: rgb(187, 43, 43);
+}

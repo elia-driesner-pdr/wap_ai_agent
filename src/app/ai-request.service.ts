@@ -9,7 +9,7 @@ export class AiRequestService {
   constructor(private http: HttpClient) {}
   
   webhookUrl : string = 'https://pdr-team.app.n8n.cloud/webhook-test/5ebb2cc1-b0b0-4a90-b9bc-060342171ece';
-  contextId : number | undefined;
+  contextId : number | null = null;
 
   public sendChat(prompt : string) : Observable<any> {
     const body = { 
@@ -24,7 +24,7 @@ export class AiRequestService {
     );
   }
 
-  public setContextId(id : number) {
+  public setContextId(id : number | null) {
     this.contextId = id;
   }
 }
