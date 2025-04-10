@@ -14,7 +14,7 @@ export class AiRequestService {
   public sendChat(prompt : string) : Observable<any> {
     const body = { 
       "prompt" : prompt,
-      "contextId": this.contextId
+      "contextId": this.contextId,
     };
 
     return this.http.post(this.webhookUrl, body, {}).pipe(

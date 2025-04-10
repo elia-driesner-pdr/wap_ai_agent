@@ -98,5 +98,6 @@ export class ChatComponent implements OnInit {
   deleteChatContext() {
     // Deletes the contextId
     this.chatService.deleteChatContext();
+    this.messages = [];
   }
 }
