@@ -7,7 +7,9 @@
         @for(infoCard of infoCards; track infoCard) {
             <div class="card info-card shadow-sm" (click)="setExampleText(infoCard);">
                 <div class="card-body">
-                    <h4 class="card-title"> {{ infoCard['title'] }} </h4>
+                    <h4 class="info-card-title"> 
+                        <span [innerHTML]="infoCard.icon" class="card-icon"></span> {{ infoCard['title'] }} 
+                    </h4>
                     <p class="card-text"> {{ infoCard['body'] }} </p>
                 </div>
             </div>
