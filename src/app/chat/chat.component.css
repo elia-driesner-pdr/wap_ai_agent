@@ -8,8 +8,8 @@
 }
 
 .chat-message {
-    width: auto;
-    max-width: 70%;
+    width: fit-content;
+    min-width: 50px;
     padding: 0.75rem 1rem;
     border-radius: 20px;
     margin-bottom: 1rem;
@@ -32,8 +32,6 @@
 
 .sent {
     background-color: #c9cbce;
-    align-self: flex-end;
-    text-align: right;
     margin-left: auto;
 }
 .cancelled {
