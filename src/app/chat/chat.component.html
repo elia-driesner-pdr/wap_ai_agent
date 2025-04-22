@@ -14,7 +14,7 @@
             @if(messages.length > 0) {
                 @for(message of messages; track message) {
                     <div class="chat-message {{ message.type }} {{ message.status }}">
-                        <p class="message-text">{{ message.text }}</p>
+                        <p class="message-text">{{ message.content }}</p>
                     </div>
                 }
             } @else {

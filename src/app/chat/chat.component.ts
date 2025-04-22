@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ChatService } from './chat.service';
+import { Message } from './message-types.model';
 import { AiRequestService } from '../ai-request.service';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
 
@@ -15,7 +16,7 @@ import { InfoCardsComponent } from '../info-cards/info-cards.component';
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit {
-  messages : any = [];
+  messages : Message[] = [];
 
   textFieldValue : string = '';
   message : string = '';
@@ -47,22 +48,24 @@ export class ChatComponent implements OnInit {
 
   displaySentMessage(uid : number, msg : string) : void {
     // Displays the message sent by the user
-    this.messages.push({'text': msg, 'type': 'sent', 'uid': uid, 'status': 'normal'});
+    this.messages.push(new Message({uid: uid, type: 'sent', content: msg}));
   }
 
   setMessageText(uid : number, msg : string) {
     // Edits the text of a message
     let message = this.getMsgByUid(uid);
-    message.text = msg;
+    if (message) {
+      message.content = msg;
+    }
   }
 
   setWelcomeMessage(uid : number, msg : string) {
-    this.messages.push({'text': msg, 'type': 'system', 'uid': uid, 'status': 'normal'});
+    this.messages.push(new Message({uid: uid, type: 'system', content: msg}));
   }
 
   async initilizeRecievedMessage(uid : number) {
     // Creates the message object
-    this.messages.push({'text': '...', 'type': 'recieved', 'uid': uid, 'status': 'normal'});
+    this.messages.push(new Message({uid: uid, type: 'recieved', content: '...'}));
   }
 
   cancelGeneration(uid : number, onError = false) : void {
@@ -71,11 +74,14 @@ export class ChatComponent implements OnInit {
 
     this.generatingResponse = false;
 
+    if (!message) {
+      return;
+    }
     message.status = 'cancelled';
     if(onError) {
-      message.text = 'Keine Verbindung zum Server';
+      message.content = 'Keine Verbindung zum Server';
     } else {
-      message.text = 'Verarbeitung abgebrochen (Falls durch die Anfrage Änderungen vorgenommen wurden sind diese nicht zurückgesetzt)';
+      message.content = 'Verarbeitung abgebrochen (Falls durch die Anfrage Änderungen vorgenommen wurden sind diese nicht zurückgesetzt)';
     }
   }
 
