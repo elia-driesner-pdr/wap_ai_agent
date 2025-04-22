@@ -6,6 +6,7 @@ interface MessageProps {
 }
   
 export class Message {
+    contentType: string = 'message';
     uid: number;
     type: string;
     content: string;
@@ -22,21 +23,25 @@ export class Message {
 
 interface TextFieldProps {
     uid: number;
-    onSubmit: (uid: number, content: string) => void;
+    onSubmit: (uid: number, value: string) => void;
     content?: string;
+    placeholder?: string;
     status?: string;
 }
 
 export class TextField {
+    contentType: string = 'textfield';
     uid: number;
-    onSubmit: (uid: number, content: string) => void;
+    onSubmit: (uid: number, value: string) => void;
     content: string;
+    placeholder: string;
     status: string;
 
-    constructor({uid, onSubmit, content = '', status = 'normal'}: TextFieldProps) {
+    constructor({uid, onSubmit, content = '', placeholder = '', status = 'normal'}: TextFieldProps) {
         this.uid = uid;
         this.onSubmit = onSubmit;
         this.content = content;
+        this.placeholder = placeholder;
         this.status = status;
     }
 }

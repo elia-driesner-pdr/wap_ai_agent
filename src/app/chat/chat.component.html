@@ -13,9 +13,13 @@
         <div class="chat">
             @if(messages.length > 0) {
                 @for(message of messages; track message) {
-                    <div class="chat-message {{ message.type }} {{ message.status }}">
-                        <p class="message-text">{{ message.content }}</p>
-                    </div>
+                    @if(message.contentType == 'message') {
+                        <div class="chat-message {{ message.type }} {{ message.status }}">
+                            <p class="message-text">{{ message.content }}</p>
+                        </div>
+                    } @else if(message.contentType == 'textfield') {
+                        <chat-text-field [data]="message"></chat-text-field>
+                    }
                 }
             } @else {
                 <app-info-cards (cardClicked)="setExampleText($event);"></app-info-cards>

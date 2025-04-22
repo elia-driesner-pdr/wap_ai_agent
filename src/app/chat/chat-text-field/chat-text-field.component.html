@@ -1,1 +1,23 @@
-<p>chat-text-field works!</p>
+<div class="chat-text-field">
+    <p>{{ data.content }}</p>
+    
+    <form (submit)="buttonClicked()">
+        <input 
+            type="text" 
+            class="form-control form-control-lg text-field" 
+            name="prompt"
+            placeholder="{{ data.placeholder }}"
+            autocomplete="off"
+            [(ngModel)]="textFieldValue"
+        >
+        @if (!submitted) {
+            <button class="btn col-1 send-button" type="submit">
+                Weiter
+            </button> 
+        } @else { 
+            <button class="btn col-1 send-button" type="submit">
+                Weiter
+            </button>
+        }
+    </form>
+</div>

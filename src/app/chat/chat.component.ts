@@ -2,21 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ChatService } from './chat.service';
-import { Message } from './message-types.model';
-import { AiRequestService } from '../ai-request.service';
+import { Message, TextField } from './message-types.model';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
+
+import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
 
 @Component({
   selector: 'app-chat',
   imports: [
     FormsModule,
-    InfoCardsComponent
+    InfoCardsComponent,
+    ChatTextFieldComponent
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
 export class ChatComponent implements OnInit {
-  messages : Message[] = [];
+  messages : any = [];
 
   textFieldValue : string = '';
   message : string = '';
@@ -35,15 +37,27 @@ export class ChatComponent implements OnInit {
         setWelcomeMessageFunc: this.setWelcomeMessage.bind(this)
     });
     this.chatService.showWelcomeMessage();
+    this.displayTextField();
   }
 
   responseGenerationFinished() {
     this.generatingResponse = false;
   }
 
-  getMsgByUid(uid : number ) {
+  getChatContentByUid(uid : number ) {
     // Returns a message, found by uid
     return this.messages.find((message : any) => message.uid == uid);
+  }
+
+  displayTextField() {
+    this.messages.push(new TextField(
+      {
+        uid: 1234, 
+        onSubmit: (uid: number, value: string) => {console.log('TextField submitted:', uid, value);}, 
+        content: 'Bitte geben sie ihr Kennzeichen ein:',
+        placeholder: 'AA BB 1234',
+      }
+    ));
   }
 
   displaySentMessage(uid : number, msg : string) : void {
@@ -53,7 +67,7 @@ export class ChatComponent implements OnInit {
 
   setMessageText(uid : number, msg : string) {
     // Edits the text of a message
-    let message = this.getMsgByUid(uid);
+    let message = this.getChatContentByUid(uid);
     if (message) {
       message.content = msg;
     }
@@ -70,7 +84,7 @@ export class ChatComponent implements OnInit {
 
   cancelGeneration(uid : number, onError = false) : void {
     // Stops the generation of the response
-    let message = this.getMsgByUid(uid);
+    let message = this.getChatContentByUid(uid);
 
     this.generatingResponse = false;
 

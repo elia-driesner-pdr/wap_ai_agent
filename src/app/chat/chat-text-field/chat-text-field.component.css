@@ -1,0 +1,39 @@
+.text-field{
+    font-size: 1.2rem;
+    border-radius: 12px;
+    max-width: 90%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.send-button {
+    margin-top: 8px;
+    margin-right: 10%;
+    border-radius: 8px;
+    width: min-content;
+    background-color: rgb(86, 86, 255);
+    color: white;
+    align-self: flex-end;
+}
+
+.chat-text-field {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 20px;
+    max-width: 400px;
+    text-align: center;
+}
+
+p {
+    font-size: larger;
+}
+
