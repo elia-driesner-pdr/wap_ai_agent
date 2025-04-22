@@ -11,6 +11,7 @@ export class ChatService {
   private cancelGeneration?: (uid : number, onError : boolean) => void;
   private setMessageText?: (uid : number, msg : string) => void;
   private responseGenerationFinished?: () => void;
+  private setWelcomeMessage?: (uid : number, msg : string) => void;
 
   private isGenerating : boolean = false;
   private shouldCancel : boolean = false;
@@ -19,19 +20,23 @@ export class ChatService {
 
   // Registers all needed Functions from the Chat Component, is called on init
   public registerCallbacks(
-    {setSentMessageFunc, initilizeRecievedMessageFunc, cancelGenerationFunc, setMessageTextFunc, responseGenerationFinishedFunc} :
+    {
+      setSentMessageFunc, initilizeRecievedMessageFunc, cancelGenerationFunc, 
+      setMessageTextFunc, responseGenerationFinishedFunc, setWelcomeMessageFunc} :
     {
       setSentMessageFunc : (uid : number, msg : string) => void,
       initilizeRecievedMessageFunc : (uid : number) => void,
       cancelGenerationFunc : (uid : number, onError : boolean) => void,
       setMessageTextFunc : (uid : number, msg : string) => void,
-      responseGenerationFinishedFunc : () => void
+      responseGenerationFinishedFunc : () => void,
+      setWelcomeMessageFunc : (uid : number, msg : string) => void
     }) : void {
     this.setSentMessage = setSentMessageFunc;
     this.initilizeRecievedMessage = initilizeRecievedMessageFunc;
     this.cancelGeneration = cancelGenerationFunc;
     this.setMessageText = setMessageTextFunc;
-    this.responseGenerationFinished = responseGenerationFinishedFunc
+    this.responseGenerationFinished = responseGenerationFinishedFunc;
+    this.setWelcomeMessage = setWelcomeMessageFunc;
   }
 
   private generateUid() : number {
@@ -39,12 +44,19 @@ export class ChatService {
     return Math.floor(Math.random() * 100000000);
   }
 
+  public showWelcomeMessage() {
+    let uid : number = this.generateUid();
+    let welcomeMsg : string = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
+    this.setWelcomeMessage?.(uid, '');
+    this.displayResponse(uid, welcomeMsg);
+  }
+
   public sendMessage(msg : string) {
     // Process the message sent by the user
     this.isGenerating = true;
     this.setSentMessage?.(this.generateUid(), msg);
 
-    let uid = this.generateUid();
+    let uid : number = this.generateUid();
     this.initilizeRecievedMessage?.(uid);
     this.loadingAnimation(uid);
 
@@ -68,7 +80,7 @@ export class ChatService {
     }
   }
 
-  private displayResponse(uid : number, msg : string) {
+  private displayResponse(uid : number, msg : string) : void {
     // Writes out the reponse in a typewriter animation
     let i = 0;
     let displayedText = '';

@@ -36,7 +36,13 @@
 }
 .cancelled {
     background-color: #ffffff00;
-    color: black;
+    color: red;
+}
+
+.system {
+    align-self: center;
+    text-align: center;
+    width: 100%;
 }
 
 .placeholder-text {

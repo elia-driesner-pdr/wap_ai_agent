@@ -30,8 +30,10 @@ export class ChatComponent implements OnInit {
         initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
         cancelGenerationFunc: this.cancelGeneration.bind(this),
         setMessageTextFunc: this.setMessageText.bind(this),
-        responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this)
+        responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this),
+        setWelcomeMessageFunc: this.setWelcomeMessage.bind(this)
     });
+    this.chatService.showWelcomeMessage();
   }
 
   responseGenerationFinished() {
@@ -52,6 +54,10 @@ export class ChatComponent implements OnInit {
     // Edits the text of a message
     let message = this.getMsgByUid(uid);
     message.text = msg;
+  }
+
+  setWelcomeMessage(uid : number, msg : string) {
+    this.messages.push({'text': msg, 'type': 'system', 'uid': uid, 'status': 'normal'});
   }
 
   async initilizeRecievedMessage(uid : number) {
