@@ -1,23 +1,27 @@
-<div class="chat-text-field">
-    <p>{{ data.content }}</p>
-    
+<div class="chat-text-area">
     <form (submit)="buttonClicked()">
-        <input 
-            type="text" 
-            class="form-control form-control-lg text-field" 
-            name="prompt"
-            placeholder="{{ data.placeholder }}"
-            autocomplete="off"
-            [(ngModel)]="textFieldValue"
-        >
-        @if (!submitted) {
-            <button class="btn col-1 send-button" type="submit">
-                Weiter
-            </button> 
-        } @else { 
+        <ng-container *ngFor="let textArea of renderedContent; trackBy: trackByFn; let i = index">
+            <div class="text-field-title">
+                <p>{{ textArea['title'] }}</p>
+            </div>
+            <input 
+                type="text" 
+                class="form-control form-control-lg text-field" 
+                name="{{ i }}"
+                placeholder="{{ textArea['placeholder'] }}"
+                autocomplete="off"
+                [(ngModel)]="textArea['value']"
+                [readonly]="submitted"
+            >     
+        </ng-container>
+        
+        <div *ngIf="!submitted" class="submit-info">
+            <div>
+                <span *ngIf="questionIndex + 1 != numberOfQuestions" >{{ questionIndex + 1}}/{{ numberOfQuestions }}</span>
+            </div>
             <button class="btn col-1 send-button" type="submit">
                 Weiter
             </button>
-        }
-    </form>
+        </div>
+    </form> 
 </div>

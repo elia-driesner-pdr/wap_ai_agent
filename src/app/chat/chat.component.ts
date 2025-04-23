@@ -54,8 +54,15 @@ export class ChatComponent implements OnInit {
       {
         uid: 1234, 
         onSubmit: (uid: number, value: string) => {console.log('TextField submitted:', uid, value);}, 
-        content: 'Bitte geben sie ihr Kennzeichen ein:',
-        placeholder: 'AA BB 1234',
+        content: [
+          {
+            'title': 'Bitte geben sie ihr Kennzeichen ein',
+            'placeholder': 'AA BB 123'
+          }, {
+            'title':'Bitte geben sie ihre Schadenummer ein',
+            'placeholder': '123456789'
+          }
+        ]
       }
     ));
   }

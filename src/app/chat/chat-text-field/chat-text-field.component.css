@@ -1,20 +1,30 @@
+.text-field-title {
+    width: 100%;
+    margin-left: 20px;
+    text-align: start;
+}
+
+.text-field-title p {
+    font-size: larger;
+    font-weight: 600;
+    color: rgb(49, 49, 49);
+}
+
 .text-field{
     font-size: 1.2rem;
     border-radius: 12px;
     max-width: 90%;
+    margin-bottom: 10px;
 }
 
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     width: 100%;
 }
 
 .send-button {
-    margin-top: 8px;
-    margin-right: 10%;
     border-radius: 8px;
     width: min-content;
     background-color: rgb(86, 86, 255);
@@ -22,18 +32,29 @@ form {
     align-self: flex-end;
 }
 
-.chat-text-field {
+.submit-info {
+    margin: 10px 10% 0 10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    align-items: center;
+}
+
+.submit-info span {
+    margin: 0;
+    color: rgb(125, 125, 125);
+}
+
+.chat-text-area {
     display: flex;
     flex-direction: column;
     margin-left: 10px;
     padding: 10px;
+    padding-bottom: 20px;
     border: 1px solid black;
     border-radius: 20px;
     max-width: 400px;
     text-align: center;
-}
-
-p {
-    font-size: larger;
 }
 
