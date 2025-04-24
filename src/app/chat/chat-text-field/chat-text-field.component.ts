@@ -19,7 +19,7 @@ export class ChatTextFieldComponent {
   @Input() data! : TextField;
   submitted : boolean = false;
 
-  renderedContent : { [key: string]: string }[] = [];
+  renderedContent : { title: string, placeholder: string, value?: string }[] = [];
   questionIndex : number = 0;
   numberOfQuestions : number = 0;
 

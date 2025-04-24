@@ -1,0 +1,37 @@
+.chat-option-buttons-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    padding-bottom: 20px;
+    max-width: 400px;
+}
+
+.option-button {
+    margin-bottom: 15px;
+}
+
+.button {
+    border-radius: 8px;
+    min-width: 200px;
+    max-width: 400px;
+    border: none;
+    width: min-content;
+    background-color: rgb(86, 86, 255);
+    color: white;
+    align-self: flex-start;
+    font-size: 1.2rem;
+}
+
+button:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.selected:disabled {
+    background-color: rgb(86, 86, 255);
+    color: white;
+}

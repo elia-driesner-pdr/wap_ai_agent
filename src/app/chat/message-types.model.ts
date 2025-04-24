@@ -25,7 +25,7 @@ export class Message {
 interface TextFieldProps {
     uid: number;
     onSubmit: (actionId: number, value: string) => void;
-content: { title: string, placeholder: string, value?: string }[]
+    content: { title: string, placeholder: string, value?: string }[]
     message?: string;
     status?: string;
 }
@@ -51,7 +51,7 @@ export class TextField {
 interface OptionButtonProps {
     message: string;
     onSubmit: (actionId: string) => void;
-    buttons: { title: string, actionId: string }[];
+    buttons: { title: string, actionId: string, status?: string }[];
     status?: string;
 }
 
@@ -59,7 +59,7 @@ export class OptionButtons {
     contentType: string = 'optionbuttons';
     message: string;
     onSubmit: (actionId: string) => void;
-    buttons: { title: string, actionId: string }[];
+    buttons: { title: string, actionId: string, status?: string }[];
     status: string;
 
     constructor({message, onSubmit, buttons, status = 'normal'}: OptionButtonProps) {

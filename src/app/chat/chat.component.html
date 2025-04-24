@@ -19,6 +19,8 @@
                         </div>
                     } @else if(message.contentType == 'textfield') {
                         <chat-text-field [data]="message"></chat-text-field>
+                    } @else if(message.contentType == 'optionbuttons') {
+                        <chat-option-buttons [data]="message"></chat-option-buttons>
                     }
                 }
             } @else {

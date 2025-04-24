@@ -7,13 +7,15 @@ import { AiRequestService } from '../ai-request.service';
 import { Message, TextField, OptionButtons } from './message-types.model';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
 import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
+import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
 
 @Component({
   selector: 'app-chat',
   imports: [
     FormsModule,
     InfoCardsComponent,
-    ChatTextFieldComponent
+    ChatTextFieldComponent,
+    ChatOptionButtonsComponent
   ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
