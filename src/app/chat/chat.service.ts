@@ -1,36 +1,37 @@
-import { Injectable } from '@angular/core';
-
 import { AiRequestService } from '../ai-request.service';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class ChatService {
-  private setSentMessage?: (uid : number, msg : string) => void;
-  private initilizeRecievedMessage?: (uid : number) => void;
-  private cancelGeneration?: (uid : number, onError : boolean) => void;
-  private setMessageText?: (uid : number, msg : string) => void;
-  private responseGenerationFinished?: () => void;
-  private setWelcomeMessage?: (uid : number, msg : string) => void;
+  private static aiRequestService: AiRequestService;
 
-  private isGenerating : boolean = false;
-  private shouldCancel : boolean = false;
+  private static setSentMessage?: (uid: number, msg: string) => void;
+  private static initilizeRecievedMessage?: (uid: number) => void;
+  private static cancelGeneration?: (uid: number, onError: boolean) => void;
+  private static setMessageText?: (uid: number, msg: string) => void;
+  private static responseGenerationFinished?: () => void;
+  private static setWelcomeMessage?: (uid: number, msg: string) => void;
 
-  constructor(private aiRequestService: AiRequestService) {};
+  private static isGenerating: boolean = false;
+  private static shouldCancel: boolean = false;
 
-  // Registers all needed Functions from the Chat Component, is called on init
-  public registerCallbacks(
-    {
-      setSentMessageFunc, initilizeRecievedMessageFunc, cancelGenerationFunc, 
-      setMessageTextFunc, responseGenerationFinishedFunc, setWelcomeMessageFunc} :
-    {
-      setSentMessageFunc : (uid : number, msg : string) => void,
-      initilizeRecievedMessageFunc : (uid : number) => void,
-      cancelGenerationFunc : (uid : number, onError : boolean) => void,
-      setMessageTextFunc : (uid : number, msg : string) => void,
-      responseGenerationFinishedFunc : () => void,
-      setWelcomeMessageFunc : (uid : number, msg : string) => void
-    }) : void {
+  public static init(aiRequestService: AiRequestService): void {
+    this.aiRequestService = aiRequestService;
+  }
+
+  public static registerCallbacks({
+    setSentMessageFunc,
+    initilizeRecievedMessageFunc,
+    cancelGenerationFunc,
+    setMessageTextFunc,
+    responseGenerationFinishedFunc,
+    setWelcomeMessageFunc,
+  }: {
+    setSentMessageFunc: (uid: number, msg: string) => void;
+    initilizeRecievedMessageFunc: (uid: number) => void;
+    cancelGenerationFunc: (uid: number, onError: boolean) => void;
+    setMessageTextFunc: (uid: number, msg: string) => void;
+    responseGenerationFinishedFunc: () => void;
+    setWelcomeMessageFunc: (uid: number, msg: string) => void;
+  }): void {
     this.setSentMessage = setSentMessageFunc;
     this.initilizeRecievedMessage = initilizeRecievedMessageFunc;
     this.cancelGeneration = cancelGenerationFunc;
@@ -39,53 +40,60 @@ export class ChatService {
     this.setWelcomeMessage = setWelcomeMessageFunc;
   }
 
-  private generateUid() : number {
-    // Generates a uid which is used to identify each message and possibly modify them
-    return Math.floor(Math.random() * 100000000);
-  }
-
-  public showWelcomeMessage() {
-    let uid : number = this.generateUid();
-    let welcomeMsg : string = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
+  public static showWelcomeMessage(): void {
+    const uid = this.generateUid();
+    const welcomeMsg = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
     this.setWelcomeMessage?.(uid, '');
     this.displayResponse(uid, welcomeMsg);
   }
 
-  public sendMessage(msg : string) {
-    // Process the message sent by the user
+  public static sendMessage(msg: string): void {
     this.isGenerating = true;
     this.setSentMessage?.(this.generateUid(), msg);
 
-    let uid : number = this.generateUid();
+    const uid = this.generateUid();
     this.initilizeRecievedMessage?.(uid);
     this.loadingAnimation(uid);
 
     this.generateResponse(uid, msg);
   }
 
-  private async loadingAnimation(uid : number) {
-    // Displays a . .. ... animation
-    let numDots = 1;
-    while(this.isGenerating) {
-      if(this.shouldCancel == true) {
-        this.cancelGeneration?.(uid, false);
-        return;
-      }
-      numDots++;
-      if(numDots > 3) {
-        numDots = 1;
-      }
-      this.setMessageText?.(uid, '...'.substring(0, numDots));
-      await new Promise(resolve => setTimeout(resolve, 300));  // Wait 300ms
+  public static insertResponseMessage(msg: string): void {
+    console.log('insertResponseMessage', msg);
+    const uid = this.generateUid();
+    this.initilizeRecievedMessage?.(uid);
+    this.displayResponse(uid, msg);
+
+  }
+
+  public static cancelResponseGeneration(): void {
+    if (this.isGenerating && !this.shouldCancel) {
+      this.shouldCancel = true;
     }
   }
 
-  private displayResponse(uid : number, msg : string) : void {
-    // Writes out the reponse in a typewriter animation
+  public static deleteChatContext(): void {
+    this.aiRequestService.setContextId(null);
+  }
+
+  private static async loadingAnimation(uid: number): Promise<void> {
+    let numDots = 1;
+    while (this.isGenerating) {
+      if (this.shouldCancel) {
+        this.cancelGeneration?.(uid, false);
+        return;
+      }
+      numDots = numDots > 3 ? 1 : numDots + 1;
+      this.setMessageText?.(uid, '...'.substring(0, numDots));
+      await new Promise(resolve => setTimeout(resolve, 300));
+    }
+  }
+
+  private static displayResponse(uid: number, msg: string): void {
     let i = 0;
     let displayedText = '';
     const interval = setInterval(() => {
-      if (i >= msg.length || this.shouldCancel == true) {
+      if (i >= msg.length || this.shouldCancel) {
         clearInterval(interval);
         this.isGenerating = false;
         this.responseGenerationFinished?.();
@@ -97,38 +105,28 @@ export class ChatService {
     }, 5);
   }
 
-  private generateResponse(uid : number, msg : string) : void {
-    // Requests the server for a response and displays it
+  private static generateResponse(uid: number, msg: string): void {
     this.aiRequestService.sendChat(msg).subscribe({
       next: (response) => {
-        if(this.shouldCancel == false) {
-          if(response == null || response['error']) {
+        if (!this.shouldCancel) {
+          if (!response || response['error']) {
             this.cancelGeneration?.(uid, true);
             this.isGenerating = false;
             return;
           }
-          this.displayResponse(uid, response['response'])
-          if(response['contextId']) {
+          this.displayResponse(uid, response['response']);
+          if (response['contextId']) {
             this.aiRequestService.setContextId(response['contextId']);
           }
-
         } else {
           this.shouldCancel = false;
           this.isGenerating = false;
         }
-      },
+      }
     });
   }
 
-  public cancelResponseGeneration() {
-    // Stops the generation of the response
-    if(this.isGenerating == true && this.shouldCancel == false) {
-      this.shouldCancel = true;
-    }
-  }
-
-  public deleteChatContext() {
-    // Deletes the context Id
-    this.aiRequestService.setContextId(null);
+  private static generateUid(): number {
+    return Math.floor(Math.random() * 100000000);
   }
 }

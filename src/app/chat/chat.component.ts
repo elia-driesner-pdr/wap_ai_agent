@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ChatService } from './chat.service';
+import { AiRequestService } from '../ai-request.service';
+
 import { Message, TextField } from './message-types.model';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
-
 import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
 
 @Component({
@@ -15,7 +16,8 @@ import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.compon
     ChatTextFieldComponent
   ],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.css'
+  styleUrl: './chat.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class ChatComponent implements OnInit {
   messages : any = [];
@@ -24,11 +26,11 @@ export class ChatComponent implements OnInit {
   message : string = '';
   generatingResponse : boolean = false;
 
-  constructor(private chatService : ChatService) {}
+  constructor(private aiRequestService: AiRequestService) {}
 
   ngOnInit() {
-    // Allows ChatService to call functions for editing messages ...
-    this.chatService.registerCallbacks({
+    ChatService.init(this.aiRequestService);
+    ChatService.registerCallbacks({
         setSentMessageFunc: this.displaySentMessage.bind(this),
         initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
         cancelGenerationFunc: this.cancelGeneration.bind(this),
@@ -36,7 +38,7 @@ export class ChatComponent implements OnInit {
         responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this),
         setWelcomeMessageFunc: this.setWelcomeMessage.bind(this)
     });
-    this.chatService.showWelcomeMessage();
+    ChatService.showWelcomeMessage();
     this.displayTextField();
   }
 
@@ -50,6 +52,7 @@ export class ChatComponent implements OnInit {
   }
 
   displayTextField() {
+    ChatService.insertResponseMessage('Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer');
     this.messages.push(new TextField(
       {
         uid: 1234, 
@@ -62,7 +65,8 @@ export class ChatComponent implements OnInit {
             'title':'Bitte geben sie ihre Schadenummer ein',
             'placeholder': '123456789'
           }
-        ]
+        ],
+        message: 'Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer',
       }
     ));
   }
@@ -81,6 +85,7 @@ export class ChatComponent implements OnInit {
   }
 
   setWelcomeMessage(uid : number, msg : string) {
+    // Displays the welcome message
     this.messages.push(new Message({uid: uid, type: 'system', content: msg}));
   }
 
@@ -109,7 +114,7 @@ export class ChatComponent implements OnInit {
   cancel() {
     // Stops generation of response
     this.generatingResponse = false;
-    this.chatService.cancelResponseGeneration();
+    ChatService.cancelResponseGeneration();
   }
 
   sendMessage() : void {
@@ -119,7 +124,7 @@ export class ChatComponent implements OnInit {
       this.textFieldValue = '';
 
       this.generatingResponse = true;
-      this.chatService.sendMessage(this.message);
+      ChatService.sendMessage(this.message);
     } 
   }
 
@@ -130,7 +135,7 @@ export class ChatComponent implements OnInit {
 
   deleteChatContext() {
     // Deletes the contextId
-    this.chatService.deleteChatContext();
+    ChatService.deleteChatContext();
     this.messages = [];
   }
 }

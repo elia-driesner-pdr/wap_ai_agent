@@ -24,7 +24,8 @@ export class Message {
 interface TextFieldProps {
     uid: number;
     onSubmit: (uid: number, value: string) => void;
-    content: { [key: string]: string }[]
+    content: { [key: string]: string }[];
+    message?: string;
     status?: string;
 }
 
@@ -33,12 +34,14 @@ export class TextField {
     uid: number;
     onSubmit: (uid: number, value: string) => void;
     content: { [key: string]: string }[]
+    message : string;
     status: string;
 
-    constructor({uid, onSubmit, content, status = 'normal'}: TextFieldProps) {
+    constructor({uid, onSubmit, content, message = '', status = 'normal'}: TextFieldProps) {
         this.uid = uid;
         this.onSubmit = onSubmit;
         this.content = content;
+        this.message = message;
         this.status = status;
     }
 }

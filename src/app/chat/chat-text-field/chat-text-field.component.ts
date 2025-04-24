@@ -1,8 +1,8 @@
 import { Component, Input  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgFor, NgIf } from '@angular/common';
 
 import { TextField } from '../message-types.model';
-import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'chat-text-field',
