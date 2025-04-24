@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from './chat.service';
 import { AiRequestService } from '../ai-request.service';
 
-import { Message, TextField } from './message-types.model';
+import { Message, TextField, OptionButtons } from './message-types.model';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
 import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
 
@@ -68,6 +68,18 @@ export class ChatComponent implements OnInit {
         ],
         message: 'Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer',
       }
+    ));
+
+    this.messages.push(new OptionButtons(
+    {
+      message: 'Möchten sie einen Termin an einer dieser Zeiten buchen?',
+      onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
+      buttons: [
+        { title: '01.10.2025 14:00', actionId: '14' },
+        { title: '01.10.2025 13:00', actionId: '13' },
+        { title: '01.10.2025 12:00', actionId: '12' }
+      ],
+    }
     ));
   }
 
