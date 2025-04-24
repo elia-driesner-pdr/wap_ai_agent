@@ -28,6 +28,7 @@ export class ChatOptionButtonsComponent {
   }
 
   optionButtonClicked(optionButton : { title: string, actionId: string, status?: string }) {
+    // Calls the submit function and disables all buttons, hightlighting the selected one
     this.submitted = true;
     optionButton.status = 'selected';
     this.data.onSubmit(optionButton.actionId);

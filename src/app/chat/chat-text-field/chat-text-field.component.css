@@ -59,3 +59,8 @@ form {
     margin: 0;
     color: rgb(125, 125, 125);
 }
+
+.highlight-red {
+    border-color: red;
+    border-width: 2px;
+}

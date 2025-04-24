@@ -25,7 +25,7 @@ export class Message {
 interface TextFieldProps {
     uid: number;
     onSubmit: (actionId: number, value: string) => void;
-    content: { title: string, placeholder: string, value?: string }[]
+    content: { title: string, placeholder: string, value?: string, highlight?: string }[]
     message?: string;
     status?: string;
 }
@@ -34,7 +34,7 @@ export class TextField {
     contentType: string = 'textfield';
     uid: number;
     onSubmit: (actionId: number, value: string) => void;
-    content: { title: string, placeholder: string, value?: string }[]
+    content: { title: string, placeholder: string, value?: string, highlight?: string }[]
     message : string;
     status: string;
 
