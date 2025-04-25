@@ -1,4 +1,4 @@
-import { Component, Input  } from '@angular/core';
+import { Component, ElementRef, Input, QueryList, ViewChildren  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 
@@ -17,6 +17,7 @@ import { TextField } from '../message-types.model';
 })
 export class ChatTextFieldComponent {
   @Input() data! : TextField;
+  @ViewChildren('inputRef') inputRefs!: QueryList<ElementRef>;
   submitted : boolean = false;
 
   renderedContent : { title: string, placeholder: string, value?: string, highlight?: string }[] = [];
@@ -31,6 +32,20 @@ export class ChatTextFieldComponent {
     if(this.data.content.length > 0) {
       this.numberOfQuestions = this.data.content.length;
     }
+  }
+
+  ngAfterViewInit() {
+    // Focus the first question input field after the view has been initialized
+    this.focusNewestQuestion();
+
+  }
+
+
+  focusNewestQuestion() {
+    setTimeout(() => {
+      const input = document.getElementById('input' + this.questionIndex.toString()) as HTMLInputElement;
+      input?.focus();
+    }, 50);
   }
 
   removeHighlights() {
@@ -49,6 +64,7 @@ export class ChatTextFieldComponent {
         this.renderedContent.push(this.data.content[this.questionIndex]);
         this.renderedContent[this.questionIndex]['value'] = '';
         this.renderedContent[this.questionIndex]['highlight'] = '';
+        this.focusNewestQuestion();
       } else {
         // ALl questions are answered
         this.submitted = true;

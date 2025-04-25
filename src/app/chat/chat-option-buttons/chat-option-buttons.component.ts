@@ -24,7 +24,6 @@ export class ChatOptionButtonsComponent {
         button['status'] = 'available';
       }
     });
-    console.log(this.renderedContent)
   }
 
   optionButtonClicked(optionButton : { title: string, actionId: string, status?: string }) {

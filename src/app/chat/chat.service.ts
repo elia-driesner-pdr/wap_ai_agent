@@ -59,7 +59,6 @@ export class ChatService {
   }
 
   public static insertResponseMessage(msg: string): void {
-    console.log('insertResponseMessage', msg);
     const uid = this.generateUid();
     this.initilizeRecievedMessage?.(uid);
     this.displayResponse(uid, msg);
