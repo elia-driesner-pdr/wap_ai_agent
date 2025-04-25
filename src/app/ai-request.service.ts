@@ -11,6 +11,14 @@ export class AiRequestService {
   webhookUrl : string = 'https://pdr-team.app.n8n.cloud/webhook-test/69011845-b520-42ed-a666-506e08d23516';
   contextId : string | null = null;
 
+  private sendRequest(body: any): Observable<any> {
+    return this.http.post(this.webhookUrl, body, {}).pipe(
+      catchError(error => {
+        return of({error: true, message: 'Fehler beim Senden' });
+      })
+    );
+  }
+
   public sendChat(prompt : string) : Observable<any> {
     const body = { 
       "prompt" : prompt,
@@ -18,11 +26,18 @@ export class AiRequestService {
       "requestOrigin": "message"
     };
 
-    return this.http.post(this.webhookUrl, body, {}).pipe(
-      catchError(error => {
-        return of({error: true, message: 'Fehler beim Senden' });
-      })
-    );
+    return this.sendRequest(body)
+  }
+
+  public authenticate(data: any) : Observable<any> {
+    const body = { 
+      "data" : data,
+      "contextId": "CID47306599",
+      "requestOrigin": "auth"
+    };
+    console.log(body);
+
+    return this.sendRequest(body)
   }
 
   public setContextId(id : string | null) {

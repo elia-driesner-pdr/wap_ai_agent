@@ -24,6 +24,7 @@ export class Message {
 // Text Field
 export interface SingleTextFieldProps {
     title: string;
+    identifier: string
     placeholder: string;
     value?: string;
     highlight?: string;
@@ -31,7 +32,7 @@ export interface SingleTextFieldProps {
 
 interface TextFieldProps {
     uid: number;
-    onSubmit: (actionId: number, value: string) => void;
+    onSubmit: (...args: any[]) => void;
     content: SingleTextFieldProps[]
     message?: string;
     status?: string;
@@ -40,7 +41,7 @@ interface TextFieldProps {
 export class TextField {
     contentType: string = 'textfield';
     uid: number;
-    onSubmit: (actionId: number, value: string) => void;
+    onSubmit: (...args: any[]) => void;
     content: SingleTextFieldProps[]
     message : string;
     status: string;
@@ -127,10 +128,12 @@ export var exampleTextField = new TextField(
       content: [
         {
           'title': 'Bitte geben sie ihr Kennzeichen ein',
-          'placeholder': 'AA BB 123'
+          'placeholder': 'AA BB 123',
+          'identifier': 'nummernschild'
         }, {
           'title':'Bitte geben sie ihre Schadenummer ein',
-          'placeholder': '123456789'
+          'placeholder': '123456789',
+          'identifier': 'schadenummer'
         }
       ],
       message: 'Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer',

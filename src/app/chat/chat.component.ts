@@ -10,6 +10,7 @@ import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.compon
 import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
 import { ChatBigButtonsComponent } from "./chat-big-buttons/chat-big-buttons.component";
 import { BigButtons, exampleBigButtons, exampleOptionButtons, exampleTextField, Message, OptionButtons, TextField } from './message-types.model';
+import { getAuthTextField } from './predefined-messages.model';
 
 @Component({
   selector: 'app-chat',
@@ -45,7 +46,12 @@ export class ChatComponent implements OnInit {
         displayElementInChatFunc: this.displayElementInChat.bind(this),
     });
     ChatService.showWelcomeMessage();
-    this.displayExampleElements();
+    this.displayAuthentication();
+  }
+
+  displayAuthentication() {
+    ChatService.insertElementInChat(getAuthTextField((args) => this.aiRequestService.authenticate(args)));
+    this.scrollToElement(0);
   }
 
   displayExampleElements() {
@@ -54,10 +60,10 @@ export class ChatComponent implements OnInit {
     ChatService.insertElementInChat(exampleBigButtons);
     this.messages.push(new Message({uid: 124, type: 'sent', content: 'Hallo, das ist ein Beispieltext'}));
     this.messages.push(new Message({uid: 245, type: 'recieved', content: 'Hallo, das ist ein Beispieltext'}));
-    this.scrollToBottom(245);
+    this.scrollToElement(245);
   }
 
-  scrollToBottom(uid : number) {
+  scrollToElement(uid : number) {
     // Scrolls to the bottom of the chat window
     if (typeof document !== 'undefined') { // Only run this code in the browser
       setTimeout(() => {
@@ -105,7 +111,7 @@ export class ChatComponent implements OnInit {
   async initilizeRecievedMessage(uid : number) {
     // Creates the message object
     this.messages.push(new Message({uid: uid, type: 'recieved', content: '...'}));
-    this.scrollToBottom(uid);
+    this.scrollToElement(uid);
   }
 
   cancelGeneration(uid : number, onError = false) : void {
