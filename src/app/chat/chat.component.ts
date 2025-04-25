@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from './chat.service';
 import { AiRequestService } from '../ai-request.service';
 
-import { Message, TextField, OptionButtons, BigButtons } from './message-types.model';
+import './message-types.model';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
 import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
 import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
 import { ChatBigButtonsComponent } from "./chat-big-buttons/chat-big-buttons.component";
+import { BigButtons, exampleBigButtons, exampleOptionButtons, exampleTextField, Message, OptionButtons, TextField } from './message-types.model';
 
 @Component({
   selector: 'app-chat',
@@ -40,10 +41,19 @@ export class ChatComponent implements OnInit {
         cancelGenerationFunc: this.cancelGeneration.bind(this),
         setMessageTextFunc: this.setMessageText.bind(this),
         responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this),
-        setWelcomeMessageFunc: this.setWelcomeMessage.bind(this)
+        setWelcomeMessageFunc: this.setWelcomeMessage.bind(this),
+        displayElementInChatFunc: this.displayElementInChat.bind(this),
     });
     ChatService.showWelcomeMessage();
-    this.displayTextField();
+    this.displayExampleElements();
+  }
+
+  displayExampleElements() {
+    ChatService.insertElementInChat(exampleTextField);
+    ChatService.insertElementInChat(exampleOptionButtons);
+    ChatService.insertElementInChat(exampleBigButtons);
+    this.messages.push(new Message({uid: 1234, type: 'sent', content: 'Hallo, das ist ein Beispieltext'}));
+    this.messages.push(new Message({uid: 1235, type: 'recieved', content: 'Hallo, das ist ein Beispieltext'}));
   }
 
   responseGenerationFinished() {
@@ -55,57 +65,11 @@ export class ChatComponent implements OnInit {
     return this.messages.find((message : any) => message.uid == uid);
   }
 
-  displayTextField() {
-    ChatService.insertResponseMessage('Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer');
-    this.messages.push(new TextField(
-      {
-        uid: 1234, 
-        onSubmit: (uid: number, value: string) => {console.log('TextField submitted:', uid, value);}, 
-        content: [
-          {
-            'title': 'Bitte geben sie ihr Kennzeichen ein',
-            'placeholder': 'AA BB 123'
-          }, {
-            'title':'Bitte geben sie ihre Schadenummer ein',
-            'placeholder': '123456789'
-          }
-        ],
-        message: 'Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer',
-      }
-    ));
-
-    this.messages.push(new OptionButtons(
-    {
-      message: 'Möchten sie einen Termin an einer dieser Zeiten buchen?',
-      onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
-      buttons: [
-        { title: '01.10.2025 14:00', actionId: '14' },
-        { title: '01.10.2025 13:00', actionId: '13' },
-        { title: '01.10.2025 12:00', actionId: '12' }
-      ],
+  displayElementInChat(uid : number, element : TextField | OptionButtons | BigButtons) : void {
+    if(element.message != '') {
+      ChatService.insertResponseMessage(element.message);
     }
-    ));
-
-    this.messages.push(new BigButtons(
-      {
-        message: '',
-        onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
-        buttons: [
-          { 
-            title: 'Termin buchen', 
-            description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
-            actionId: 'buchen',
-            icon: 'bi bi-calendar3'
-          },
-          { 
-            title: 'Fragen beantworten', 
-            description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
-            actionId: 'fragen',
-            icon: 'bi bi-info-square-fill'
-          },
-        ],
-      }
-    ));
+    this.messages.push(element);
   }
 
   displaySentMessage(uid : number, msg : string) : void {

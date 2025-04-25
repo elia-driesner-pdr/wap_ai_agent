@@ -42,10 +42,13 @@ export class ChatTextFieldComponent {
 
 
   focusNewestQuestion() {
-    setTimeout(() => {
-      const input = document.getElementById('input' + this.questionIndex.toString()) as HTMLInputElement;
-      input?.focus();
-    }, 50);
+    // Focus the newest input field
+    if (typeof document !== 'undefined') { // Only run this code in the browser
+      setTimeout(() => {
+        const input = document.getElementById('input' + this.questionIndex.toString()) as HTMLInputElement;
+        input?.focus();
+      }, 50);
+    } 
   }
 
   removeHighlights() {

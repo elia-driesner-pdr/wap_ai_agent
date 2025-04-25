@@ -113,3 +113,53 @@ export class BigButtons {
         this.status = status;
     }
 }
+
+export var exampleTextField = new TextField(
+    {
+      uid: 1234, 
+      onSubmit: (uid: number, value: string) => {console.log('TextField submitted:', uid, value);}, 
+      content: [
+        {
+          'title': 'Bitte geben sie ihr Kennzeichen ein',
+          'placeholder': 'AA BB 123'
+        }, {
+          'title':'Bitte geben sie ihre Schadenummer ein',
+          'placeholder': '123456789'
+        }
+      ],
+      message: 'Um Ihnen besser helfen zu können authenfizieren Sie sich bitte mit ihrem Kennzeichen und ihrer Schadenummer',
+    }
+);
+
+export var exampleOptionButtons = new OptionButtons(
+    {
+      message: 'Möchten sie einen Termin an einer dieser Zeiten buchen?',
+      onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
+      buttons: [
+        { title: '01.10.2025 14:00', actionId: '14' },
+        { title: '01.10.2025 13:00', actionId: '13' },
+        { title: '01.10.2025 12:00', actionId: '12' }
+      ],
+    }
+);
+
+export var exampleBigButtons = new BigButtons(
+    {
+      message: '',
+      onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
+      buttons: [
+        { 
+          title: 'Termin buchen', 
+          description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
+          actionId: 'buchen',
+          icon: 'bi bi-calendar3'
+        },
+        { 
+          title: 'Fragen beantworten', 
+          description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
+          actionId: 'fragen',
+          icon: 'bi bi-info-square-fill'
+        },
+      ],
+    }
+);

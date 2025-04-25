@@ -19,6 +19,7 @@ export class ChatBigButtonsComponent {
   submitted : boolean = false;
 
   ngOnInit() {
+    // Initialize the renderedContent with the buttons, setting undefined values to default values
     this.renderedContent = this.data.buttons;
     this.renderedContent.forEach((button : SingleBigButtonProps) => {
       if(!button.status) {

@@ -9,6 +9,7 @@ export class ChatService {
   private static setMessageText?: (uid: number, msg: string) => void;
   private static responseGenerationFinished?: () => void;
   private static setWelcomeMessage?: (uid: number, msg: string) => void;
+  private static displayElementInChat?: (uid: number, msg: any) => void;
 
   private static isGenerating: boolean = false;
   private static shouldCancel: boolean = false;
@@ -24,6 +25,7 @@ export class ChatService {
     setMessageTextFunc,
     responseGenerationFinishedFunc,
     setWelcomeMessageFunc,
+    displayElementInChatFunc
   }: {
     setSentMessageFunc: (uid: number, msg: string) => void;
     initilizeRecievedMessageFunc: (uid: number) => void;
@@ -31,6 +33,7 @@ export class ChatService {
     setMessageTextFunc: (uid: number, msg: string) => void;
     responseGenerationFinishedFunc: () => void;
     setWelcomeMessageFunc: (uid: number, msg: string) => void;
+    displayElementInChatFunc: (uid: number, msg: any) => void;
   }): void {
     this.setSentMessage = setSentMessageFunc;
     this.initilizeRecievedMessage = initilizeRecievedMessageFunc;
@@ -38,6 +41,7 @@ export class ChatService {
     this.setMessageText = setMessageTextFunc;
     this.responseGenerationFinished = responseGenerationFinishedFunc;
     this.setWelcomeMessage = setWelcomeMessageFunc;
+    this.displayElementInChat = displayElementInChatFunc;
   }
 
   public static showWelcomeMessage(): void {
@@ -45,6 +49,11 @@ export class ChatService {
     const welcomeMsg = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
     this.setWelcomeMessage?.(uid, '');
     this.displayResponse(uid, welcomeMsg);
+  }
+
+  public static insertElementInChat(msg: any): void {
+    const uid = this.generateUid();
+    this.displayElementInChat?.(uid, msg);
   }
 
   public static sendMessage(msg: string): void {
