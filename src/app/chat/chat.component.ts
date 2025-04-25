@@ -94,12 +94,14 @@ export class ChatComponent implements OnInit {
           { 
             title: 'Termin buchen', 
             description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
-            actionId: 'buchen' 
+            actionId: 'buchen',
+            icon: 'bi bi-calendar3'
           },
           { 
             title: 'Fragen beantworten', 
             description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
-            actionId: 'fragen' 
+            actionId: 'fragen',
+            icon: 'bi bi-info-square-fill'
           },
         ],
       }

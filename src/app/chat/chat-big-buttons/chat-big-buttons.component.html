@@ -1,1 +1,15 @@
-<p>chat-big-buttons works!</p>
+<div class="chat-big-buttons-container">
+    <div 
+    *ngFor="let optionButton of renderedContent; trackBy: trackByFn;" 
+    (click)="!submitted && bigButtonClicked(optionButton)"
+    [class.disabled]="submitted"
+    [class.selected]="optionButton.status == 'selected'"
+    class="card button-card shadow-sm">
+        <div class="card-body">
+            <h4 class="button-title"> 
+                <span *ngIf="optionButton['icon']" class="button-icon {{ optionButton['icon'] }}"></span> {{ optionButton['title'] }} 
+            </h4>
+            <p class="button-description"> {{ optionButton['description'] }} </p>
+        </div>
+    </div>
+</div>

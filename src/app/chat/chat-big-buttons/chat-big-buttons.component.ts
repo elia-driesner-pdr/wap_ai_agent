@@ -1,10 +1,14 @@
 import { Component, Input } from '@angular/core';
 
 import { BigButtons, SingleBigButtonProps } from '../message-types.model';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'chat-big-buttons',
-  imports: [],
+  imports: [
+    NgFor,
+    NgIf
+  ],
   templateUrl: './chat-big-buttons.component.html',
   styleUrl: './chat-big-buttons.component.css',
   standalone: true
@@ -19,15 +23,17 @@ export class ChatBigButtonsComponent {
     this.renderedContent.forEach((button : SingleBigButtonProps) => {
       if(!button.status) {
         button['status'] = 'available';
+      } if(!button.icon) {
+        button['icon'] = '';
       }
     });
   }
 
-  optionButtonClicked(optionButton : SingleBigButtonProps) {
+  bigButtonClicked(bigButton : SingleBigButtonProps) {
     // Calls the submit function and disables all buttons, hightlighting the selected one
     this.submitted = true;
-    optionButton.status = 'selected';
-    this.data.onSubmit(optionButton.actionId);
+    bigButton.status = 'selected';
+    this.data.onSubmit(bigButton.actionId);
   }
 
   trackByFn(index: number): number {
