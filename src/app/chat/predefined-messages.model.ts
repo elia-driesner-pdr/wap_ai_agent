@@ -1,4 +1,4 @@
-import { TextField } from './message-types.model';
+import { Message, TextField } from './message-types.model';
 
 export function getAuthTextField(onSubmitFunc : (textField: TextField) => void): TextField {
     var authTextField = new TextField(
@@ -16,4 +16,8 @@ export function getAuthTextField(onSubmitFunc : (textField: TextField) => void):
         }
     )
     return authTextField;
+}
+
+export function getAuthFailedMessage(): string {
+    return 'Die Authentifizierung ist fehlgeschlagen. Dein Kennzeichen wurde nicht gefunden. Überprüfe bitte die Eingabe und versuche es erneut.';
 }

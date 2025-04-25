@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 import { AiRequestService } from '../ai-request.service';
 
 export class ChatService {
@@ -51,9 +52,10 @@ export class ChatService {
     this.displayResponse(uid, welcomeMsg);
   }
 
-  public static insertElementInChat(msg: any): void {
+  public static insertElementInChat(element: any): number {
     const uid = this.generateUid();
-    this.displayElementInChat?.(uid, msg);
+    this.displayElementInChat?.(uid, element);
+    return uid;
   }
 
   public static sendMessage(msg: string): void {
@@ -114,7 +116,7 @@ export class ChatService {
   }
 
   private static generateResponse(uid: number, msg: string): void {
-    this.aiRequestService.sendChat(msg).subscribe({
+    let subscription: Subscription = this.aiRequestService.sendChat(msg).subscribe({
       next: (response) => {
         if (!this.shouldCancel) {
           if (!response || response['error']) {
@@ -130,6 +132,7 @@ export class ChatService {
           this.shouldCancel = false;
           this.isGenerating = false;
         }
+        subscription.unsubscribe();
       }
     });
   }

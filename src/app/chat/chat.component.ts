@@ -10,7 +10,8 @@ import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.compon
 import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
 import { ChatBigButtonsComponent } from "./chat-big-buttons/chat-big-buttons.component";
 import { BigButtons, exampleBigButtons, exampleOptionButtons, exampleTextField, Message, OptionButtons, TextField } from './message-types.model';
-import { getAuthTextField } from './predefined-messages.model';
+import { getAuthTextField, getAuthFailedMessage } from './predefined-messages.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -49,9 +50,25 @@ export class ChatComponent implements OnInit {
     this.displayAuthentication();
   }
 
+  authenticate(value : any) {
+    let subscription: Subscription = this.aiRequestService.authenticate(value).subscribe({
+      next: (response) => {
+        if(response['success']) {
+
+        } else {
+          const authField = getAuthTextField((args) => this.authenticate(args));
+          authField.message = getAuthFailedMessage();
+          let uid = ChatService.insertElementInChat(authField);
+          this.scrollToElement(uid);
+        }
+        subscription.unsubscribe();
+      }
+    });
+  }
+
   displayAuthentication() {
-    ChatService.insertElementInChat(getAuthTextField((args) => this.aiRequestService.authenticate(args)));
-    this.scrollToElement(0);
+    let uid = ChatService.insertElementInChat(getAuthTextField((args) => this.authenticate(args)));
+    this.scrollToElement(uid);
   }
 
   displayExampleElements() {
