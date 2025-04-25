@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, QueryList, ViewChildren  } from '@angular
 import { FormsModule } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 
-import { TextField } from '../message-types.model';
+import { TextField, SingleTextFieldProps } from '../message-types.model';
 
 @Component({
   selector: 'chat-text-field',
@@ -20,7 +20,7 @@ export class ChatTextFieldComponent {
   @ViewChildren('inputRef') inputRefs!: QueryList<ElementRef>;
   submitted : boolean = false;
 
-  renderedContent : { title: string, placeholder: string, value?: string, highlight?: string }[] = [];
+  renderedContent : SingleTextFieldProps[] = [];
   questionIndex : number = 0;
   numberOfQuestions : number = 0;
 

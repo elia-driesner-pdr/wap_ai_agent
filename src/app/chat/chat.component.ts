@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from './chat.service';
 import { AiRequestService } from '../ai-request.service';
 
-import { Message, TextField, OptionButtons } from './message-types.model';
+import { Message, TextField, OptionButtons, BigButtons } from './message-types.model';
 import { InfoCardsComponent } from '../info-cards/info-cards.component';
 import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
 import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
+import { ChatBigButtonsComponent } from "./chat-big-buttons/chat-big-buttons.component";
 
 @Component({
   selector: 'app-chat',
@@ -15,8 +16,9 @@ import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-bu
     FormsModule,
     InfoCardsComponent,
     ChatTextFieldComponent,
-    ChatOptionButtonsComponent
-  ],
+    ChatOptionButtonsComponent,
+    ChatBigButtonsComponent
+],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
   encapsulation: ViewEncapsulation.None
@@ -82,6 +84,25 @@ export class ChatComponent implements OnInit {
         { title: '01.10.2025 12:00', actionId: '12' }
       ],
     }
+    ));
+
+    this.messages.push(new BigButtons(
+      {
+        message: '',
+        onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
+        buttons: [
+          { 
+            title: 'Termin buchen', 
+            description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
+            actionId: 'buchen' 
+          },
+          { 
+            title: 'Fragen beantworten', 
+            description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
+            actionId: 'fragen' 
+          },
+        ],
+      }
     ));
   }
 

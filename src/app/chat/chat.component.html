@@ -21,7 +21,9 @@
                         <chat-text-field [data]="message"></chat-text-field>
                     } @else if(message.contentType == 'optionbuttons') {
                         <chat-option-buttons [data]="message"></chat-option-buttons>
-                    }
+                    } @else if(message.contentType == 'bigbuttons') {
+                        <chat-big-buttons [data]="message"></chat-big-buttons>
+                    } 
                 }
             } @else {
                 <app-info-cards (cardClicked)="setExampleText($event);"></app-info-cards>
