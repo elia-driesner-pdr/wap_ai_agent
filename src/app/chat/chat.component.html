@@ -13,17 +13,19 @@
         <div class="chat">
             @if(messages.length > 0) {
                 @for(message of messages; track message) {
-                    @if(message.contentType == 'message') {
-                        <div class="chat-message {{ message.type }} {{ message.status }}">
-                            <p class="message-text">{{ message.content }}</p>
-                        </div>
-                    } @else if(message.contentType == 'textfield') {
-                        <chat-text-field [data]="message"></chat-text-field>
-                    } @else if(message.contentType == 'optionbuttons') {
-                        <chat-option-buttons [data]="message"></chat-option-buttons>
-                    } @else if(message.contentType == 'bigbuttons') {
-                        <chat-big-buttons [data]="message"></chat-big-buttons>
-                    } 
+                    <div id="message{{ message.uid }}">
+                        @if(message.contentType == 'message') {
+                            <div class="chat-message {{ message.type }} {{ message.status }}">
+                                <p class="message-text">{{ message.content }}</p>
+                            </div>
+                        } @else if(message.contentType == 'textfield') {
+                            <chat-text-field [data]="message"></chat-text-field>
+                        } @else if(message.contentType == 'optionbuttons') {
+                            <chat-option-buttons [data]="message"></chat-option-buttons>
+                        } @else if(message.contentType == 'bigbuttons') {
+                            <chat-big-buttons [data]="message"></chat-big-buttons>
+                        } 
+                    </div>
                 }
             } @else {
                 <app-info-cards (cardClicked)="setExampleText($event);"></app-info-cards>

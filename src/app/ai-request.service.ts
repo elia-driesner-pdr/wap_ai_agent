@@ -8,13 +8,14 @@ import { catchError, Observable, of } from 'rxjs';
 export class AiRequestService {
   constructor(private http: HttpClient) {}
   
-  webhookUrl : string = 'https://pdr-team.app.n8n.cloud/webhook-test/5ebb2cc1-b0b0-4a90-b9bc-060342171ece';
+  webhookUrl : string = 'https://pdr-team.app.n8n.cloud/webhook-test/69011845-b520-42ed-a666-506e08d23516';
   contextId : string | null = null;
 
   public sendChat(prompt : string) : Observable<any> {
     const body = { 
       "prompt" : prompt,
-      "contextId": this.contextId,
+      "contextId": "CID47306599",
+      "requestOrigin": "message"
     };
 
     return this.http.post(this.webhookUrl, body, {}).pipe(

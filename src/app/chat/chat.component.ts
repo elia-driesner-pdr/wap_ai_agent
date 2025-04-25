@@ -52,8 +52,20 @@ export class ChatComponent implements OnInit {
     ChatService.insertElementInChat(exampleTextField);
     ChatService.insertElementInChat(exampleOptionButtons);
     ChatService.insertElementInChat(exampleBigButtons);
-    this.messages.push(new Message({uid: 1234, type: 'sent', content: 'Hallo, das ist ein Beispieltext'}));
-    this.messages.push(new Message({uid: 1235, type: 'recieved', content: 'Hallo, das ist ein Beispieltext'}));
+    this.messages.push(new Message({uid: 124, type: 'sent', content: 'Hallo, das ist ein Beispieltext'}));
+    this.messages.push(new Message({uid: 245, type: 'recieved', content: 'Hallo, das ist ein Beispieltext'}));
+    this.scrollToBottom(245);
+  }
+
+  scrollToBottom(uid : number) {
+    // Scrolls to the bottom of the chat window
+    if (typeof document !== 'undefined') { // Only run this code in the browser
+      setTimeout(() => {
+        const element = document.getElementById('message' + uid.toString()) as HTMLInputElement;
+        console.log(element);
+        element?.scrollIntoView({behavior: 'smooth'});
+      }, 50);
+    } 
   }
 
   responseGenerationFinished() {
@@ -93,6 +105,7 @@ export class ChatComponent implements OnInit {
   async initilizeRecievedMessage(uid : number) {
     // Creates the message object
     this.messages.push(new Message({uid: uid, type: 'recieved', content: '...'}));
+    this.scrollToBottom(uid);
   }
 
   cancelGeneration(uid : number, onError = false) : void {

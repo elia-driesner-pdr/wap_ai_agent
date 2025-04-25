@@ -62,6 +62,7 @@ export interface SingleOptionButtonProps {
 }
 
 interface OptionButtonProps {
+    uid: number;
     message: string;
     onSubmit: (actionId: string) => void;
     buttons: SingleOptionButtonProps[];
@@ -69,13 +70,15 @@ interface OptionButtonProps {
 }
 
 export class OptionButtons {
+    uid: number;
     contentType: string = 'optionbuttons';
     message: string;
     onSubmit: (actionId: string) => void;
     buttons: SingleOptionButtonProps[];
     status: string;
 
-    constructor({message, onSubmit, buttons, status = 'normal'}: OptionButtonProps) {
+    constructor({uid, message, onSubmit, buttons, status = 'normal'}: OptionButtonProps) {
+        this.uid = uid;
         this.message = message;
         this.onSubmit = onSubmit;
         this.buttons = buttons;
@@ -93,6 +96,7 @@ export interface SingleBigButtonProps {
 }
 
 interface BigButtonProps {
+    uid: number;
     message: string;
     onSubmit: (actionId: string) => void;
     buttons: SingleBigButtonProps[];
@@ -100,13 +104,15 @@ interface BigButtonProps {
 }
 
 export class BigButtons {
+    uid: number;
     contentType: string = 'bigbuttons';
     message: string;
     onSubmit: (actionId: string) => void;
     buttons: SingleBigButtonProps[];
     status: string;
 
-    constructor({message, onSubmit, buttons, status = 'normal'}: BigButtonProps) {
+    constructor({uid, message, onSubmit, buttons, status = 'normal'}: BigButtonProps) {
+        this.uid = uid;
         this.message = message;
         this.onSubmit = onSubmit;
         this.buttons = buttons;
@@ -116,7 +122,7 @@ export class BigButtons {
 
 export var exampleTextField = new TextField(
     {
-      uid: 1234, 
+      uid: 12407, 
       onSubmit: (uid: number, value: string) => {console.log('TextField submitted:', uid, value);}, 
       content: [
         {
@@ -133,33 +139,35 @@ export var exampleTextField = new TextField(
 
 export var exampleOptionButtons = new OptionButtons(
     {
-      message: 'Möchten sie einen Termin an einer dieser Zeiten buchen?',
-      onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
-      buttons: [
-        { title: '01.10.2025 14:00', actionId: '14' },
-        { title: '01.10.2025 13:00', actionId: '13' },
-        { title: '01.10.2025 12:00', actionId: '12' }
-      ],
+        uid: 230758,
+        message: 'Möchten sie einen Termin an einer dieser Zeiten buchen?',
+        onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
+        buttons: [
+            { title: '01.10.2025 14:00', actionId: '14' },
+            { title: '01.10.2025 13:00', actionId: '13' },
+            { title: '01.10.2025 12:00', actionId: '12' }
+        ],
     }
 );
 
 export var exampleBigButtons = new BigButtons(
     {
-      message: '',
-      onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
-      buttons: [
-        { 
-          title: 'Termin buchen', 
-          description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
-          actionId: 'buchen',
-          icon: 'bi bi-calendar3'
-        },
-        { 
-          title: 'Fragen beantworten', 
-          description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
-          actionId: 'fragen',
-          icon: 'bi bi-info-square-fill'
-        },
-      ],
+        uid: 1398560,
+        message: '',
+        onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
+        buttons: [
+            { 
+            title: 'Termin buchen', 
+            description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
+            actionId: 'buchen',
+            icon: 'bi bi-calendar3'
+            },
+            { 
+            title: 'Fragen beantworten', 
+            description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
+            actionId: 'fragen',
+            icon: 'bi bi-info-square-fill'
+            },
+        ],
     }
 );
