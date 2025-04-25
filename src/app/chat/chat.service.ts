@@ -1,6 +1,8 @@
 import { Subscription } from 'rxjs';
 import { AiRequestService } from '../ai-request.service';
 
+import { getAuthTextField, getAuthFailedMessage } from './predefined-messages.model';
+
 export class ChatService {
   private static aiRequestService: AiRequestService;
 
@@ -50,6 +52,25 @@ export class ChatService {
     const welcomeMsg = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
     this.setWelcomeMessage?.(uid, '');
     this.displayResponse(uid, welcomeMsg);
+  }
+
+  public static authenticate(value : any) {
+      let subscription: Subscription = this.aiRequestService.authenticate(value).subscribe({
+        next: (response) => {
+          if(response['success']) {
+  
+          } else {
+            const authField = getAuthTextField((args) => this.authenticate(args));
+            authField.message = getAuthFailedMessage();
+            this.insertElementInChat(authField);
+          }
+          subscription.unsubscribe();
+        }
+      });
+    }
+
+  public static startAuthentication(): void {
+    ChatService.insertElementInChat(getAuthTextField((args) => this.authenticate(args)));
   }
 
   public static insertElementInChat(element: any): number {
