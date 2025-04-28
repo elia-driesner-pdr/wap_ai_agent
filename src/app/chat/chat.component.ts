@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
 
 import { ChatService } from './chat.service';
 import { AiRequestService } from '../ai-request.service';
@@ -9,7 +10,7 @@ import { InfoCardsComponent } from '../info-cards/info-cards.component';
 import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.component';
 import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
 import { ChatBigButtonsComponent } from "./chat-big-buttons/chat-big-buttons.component";
-import { BigButtons, exampleBigButtons, exampleOptionButtons, exampleTextField, Message, OptionButtons, TextField } from './message-types.model';
+import { BigButtons, exampleBigButtons, exampleOptionButtons, exampleTextField, Message, OptionButtons, TextField, ErrorMessage } from './message-types.model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -19,7 +20,8 @@ import { Subscription } from 'rxjs';
     InfoCardsComponent,
     ChatTextFieldComponent,
     ChatOptionButtonsComponent,
-    ChatBigButtonsComponent
+    ChatBigButtonsComponent,
+    NgIf
 ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css',
@@ -39,6 +41,7 @@ export class ChatComponent implements OnInit {
     ChatService.registerCallbacks({
         setSentMessageFunc: this.displaySentMessage.bind(this),
         initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
+        cancelGenerationFunc: this.cancelGeneration.bind(this),
         setMessageTextFunc: this.setMessageText.bind(this),
         responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this),
         setWelcomeMessageFunc: this.setWelcomeMessage.bind(this),
@@ -57,17 +60,6 @@ export class ChatComponent implements OnInit {
     this.scrollToElement(245);
   }
 
-  scrollToElement(uid : number) {
-    // Scrolls to the bottom of the chat window
-    if (typeof document !== 'undefined') { // Only run this code in the browser
-      setTimeout(() => {
-        const element = document.getElementById('message' + uid.toString()) as HTMLInputElement;
-        console.log(element);
-        element?.scrollIntoView({behavior: 'smooth'});
-      }, 50);
-    } 
-  }
-
   responseGenerationFinished() {
     this.generatingResponse = false;
   }
@@ -77,10 +69,8 @@ export class ChatComponent implements OnInit {
     return this.messages.find((message : any) => message.uid == uid);
   }
 
-  displayElementInChat(uid : number, element : TextField | OptionButtons | BigButtons) : void {
-    if(element.message != '') {
-      ChatService.insertResponseMessage(element.message);
-    }
+  displayElementInChat(uid : number, element : TextField | OptionButtons | BigButtons | ErrorMessage) : void {
+    // Adds element to the chat
     this.messages.push(element);
     this.scrollToElement(uid);
   }
@@ -120,6 +110,18 @@ export class ChatComponent implements OnInit {
     } 
   }
 
+  cancelGeneration(onError = false) : void {
+    // Stops the generation of the response
+    this.generatingResponse = false;
+
+    ChatService.insertElementInChat(new ErrorMessage({
+      uid: 0,
+      content: onError ? 
+      'Keine Verbindung zum Server' : 
+      'Verarbeitung abgebrochen (Falls durch die Anfrage Änderungen vorgenommen wurden sind diese nicht zurückgesetzt)'
+    }));
+  }
+
   setExampleText(cardInfo : any) {
     // Sets a predefined text in the textfield
     this.textFieldValue = cardInfo['example'];
@@ -129,5 +131,19 @@ export class ChatComponent implements OnInit {
     // Deletes the contextId
     ChatService.deleteChatContext();
     this.messages = [];
+  }
+
+  cancel() {
+    this.generatingResponse = false;
+  }
+
+  scrollToElement(uid : number) {
+    // Scrolls to the bottom of the chat window
+    if (typeof document !== 'undefined') { // Only run this code in the browser
+      setTimeout(() => {
+        const element = document.getElementById('message' + uid.toString()) as HTMLInputElement;
+        element?.scrollIntoView({behavior: 'smooth'});
+      }, 50);
+    } 
   }
 }

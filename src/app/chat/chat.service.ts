@@ -9,7 +9,7 @@ export class ChatService {
 
   private static setSentMessage?: (uid: number, msg: string) => void;
   private static initilizeRecievedMessage?: (uid: number) => void;
-  private static cancelGeneration?: (uid: number, onError: boolean) => void;
+  private static cancelGeneration?: (onError: boolean) => void;
   private static setMessageText?: (uid: number, msg: string) => void;
   private static responseGenerationFinished?: () => void;
   private static setWelcomeMessage?: (uid: number, msg: string) => void;
@@ -25,6 +25,7 @@ export class ChatService {
   public static registerCallbacks({
     setSentMessageFunc,
     initilizeRecievedMessageFunc,
+    cancelGenerationFunc,
     setMessageTextFunc,
     responseGenerationFinishedFunc,
     setWelcomeMessageFunc,
@@ -32,6 +33,7 @@ export class ChatService {
   }: {
     setSentMessageFunc: (uid: number, msg: string) => void;
     initilizeRecievedMessageFunc: (uid: number) => void;
+    cancelGenerationFunc: (onError: boolean) => void;
     setMessageTextFunc: (uid: number, msg: string) => void;
     responseGenerationFinishedFunc: () => void;
     setWelcomeMessageFunc: (uid: number, msg: string) => void;
@@ -39,6 +41,7 @@ export class ChatService {
   }): void {
     this.setSentMessage = setSentMessageFunc;
     this.initilizeRecievedMessage = initilizeRecievedMessageFunc;
+    this.cancelGeneration = cancelGenerationFunc;
     this.setMessageText = setMessageTextFunc;
     this.responseGenerationFinished = responseGenerationFinishedFunc;
     this.setWelcomeMessage = setWelcomeMessageFunc;
@@ -59,6 +62,11 @@ export class ChatService {
   public static submitElement(data: any) {
     let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
       next: (response) => {
+        if (!response || response['error']) {
+          this.cancelGeneration?.(true);
+          this.isGenerating = false;
+          return;
+        }
         if (response['contextId']) {
           this.aiRequestService.setContextId(response['contextId']);
         }
@@ -87,6 +95,7 @@ export class ChatService {
 
   public static insertElementInChat(element: any): number {
     const uid = this.generateUid();
+    element.uid = uid;
     this.displayElementInChat?.(uid, element);
     return uid;
   }
@@ -117,11 +126,11 @@ export class ChatService {
   private static displayRecievedMessage(uid: number, msg: string): void {
     let i = 0;
     let displayedText = '';
+    this.responseGenerationFinished?.();
     const interval = setInterval(() => {
       if (i >= msg.length || this.shouldCancel) {
         clearInterval(interval);
         this.isGenerating = false;
-        this.responseGenerationFinished?.();
       } else {
         displayedText += msg[i];
         this.setMessageText?.(uid, displayedText);

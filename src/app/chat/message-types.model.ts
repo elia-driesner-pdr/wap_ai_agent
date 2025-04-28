@@ -21,6 +21,23 @@ export class Message {
     }
 }
 
+// Error Message
+interface ErrorMessageProps {
+    uid: number;
+    content?: string;
+}
+  
+export class ErrorMessage {
+    contentType: string = 'errormessage';
+    uid: number;
+    content: string;
+
+    constructor({ uid, content = ''}: ErrorMessageProps) {
+        this.uid = uid;
+        this.content = content;
+    }
+}
+
 // Text Field
 export interface SingleTextFieldProps {
     title: string;

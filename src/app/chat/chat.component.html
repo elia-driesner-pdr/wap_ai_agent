@@ -18,6 +18,10 @@
                             <div class="chat-message {{ message.type }} {{ message.status }}">
                                 <p class="message-text">{{ message.content }}</p>
                             </div>
+                        } @else if(message.contentType == 'errormessage') {
+                            <div class="chat-message cancelled">
+                                <p class="message-text">{{ message.content }}</p>
+                            </div>
                         } @else if(message.contentType == 'textfield') {
                             <chat-text-field [data]="message"></chat-text-field>
                         } @else if(message.contentType == 'optionbuttons') {
@@ -27,6 +31,11 @@
                         } 
                     </div>
                 }
+                <div *ngIf="generatingResponse" class="chat-message loading-box">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
             } @else {
                 <app-info-cards (cardClicked)="setExampleText($event);"></app-info-cards>
             }
