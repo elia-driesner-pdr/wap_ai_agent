@@ -29,13 +29,23 @@ export class AiRequestService {
     return this.sendRequest(body)
   }
 
+  public submitElement(data: any) : Observable<any> {
+    const body = { 
+      "data" : data.content,
+      "contextId": "CID47306599",
+      "requestOrigin": data.contentType
+    };
+    console.log(body);
+
+    return this.sendRequest(body)
+  }
+
   public authenticate(data: any) : Observable<any> {
     const body = { 
       "data" : data,
       "contextId": "CID47306599",
       "requestOrigin": "auth"
     };
-    console.log(body);
 
     return this.sendRequest(body)
   }

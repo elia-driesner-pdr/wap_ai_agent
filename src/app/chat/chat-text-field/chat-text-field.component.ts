@@ -71,14 +71,18 @@ export class ChatTextFieldComponent {
       } else {
         // ALl questions are answered
         this.submitted = true;
-        this.data.onSubmit(this.renderedContent.map(
+        let returnValue = this.renderedContent.map(
           (question: SingleTextFieldProps) => {
             return {
               "identifier": question.identifier, 
               "value": question.value
             };
           }
-        ));
+        );
+        this.data.onSubmit({
+          'contentType': this.data.contentType,
+          'content': returnValue
+        });
       }
     } else {
       // If no value is entered, highlight the current question

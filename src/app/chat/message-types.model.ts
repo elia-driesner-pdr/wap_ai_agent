@@ -58,6 +58,24 @@ export class TextField {
     }
 }
 
+export function createTextField(element: any, uid: number, onSubmit: (...args: any[]) => void): TextField {
+    const content: SingleTextFieldProps[] = element.content.map((item: any) => ({
+        title: item.title,
+        identifier: item.identifier,
+        placeholder: item.placeholder,
+    }));
+
+    return new TextField({
+        uid,
+        actionId: element.actionId,
+        onSubmit,
+        content,
+        message: element.message ?? '',
+        status: 'normal'
+    });
+}
+
+
 // Option Buttons
 export interface SingleOptionButtonProps {
     title: string;

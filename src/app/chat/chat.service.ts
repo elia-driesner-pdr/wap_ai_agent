@@ -1,6 +1,7 @@
 import { Subscription } from 'rxjs';
 import { AiRequestService } from '../ai-request.service';
 
+import * as MessageModels from './message-types.model';
 import { getAuthTextField, getAuthFailedMessage } from './predefined-messages.model';
 
 export class ChatService {
@@ -54,11 +55,30 @@ export class ChatService {
     this.displayResponse(uid, welcomeMsg);
   }
 
+  public static setWelcomeMessageFunc(uid: number, msg: string): void {
+    this.setWelcomeMessage?.(uid, msg);
+  } 
+
   public static authenticate(value : any) {
       let subscription: Subscription = this.aiRequestService.authenticate(value).subscribe({
         next: (response) => {
           if(response['success']) {
-  
+            if (response['contextId']) {
+              this.aiRequestService.setContextId(response['contextId']);
+              switch(response['returnType']) {
+                case 'message':
+                  this.insertResponseMessage(response['response']);
+                  break;
+                case 'textfield':
+                  const textField : MessageModels.TextField = MessageModels.createTextField(
+                    response['element'],
+                    this.generateUid(),
+                    this.aiRequestService.submitElement
+                  );
+                  this.insertElementInChat(textField);
+                  break;
+              }
+            }
           } else {
             const authField = getAuthTextField((args) => this.authenticate(args));
             authField.message = getAuthFailedMessage();
