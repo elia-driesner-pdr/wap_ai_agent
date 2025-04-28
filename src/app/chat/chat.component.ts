@@ -39,7 +39,6 @@ export class ChatComponent implements OnInit {
     ChatService.registerCallbacks({
         setSentMessageFunc: this.displaySentMessage.bind(this),
         initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
-        cancelGenerationFunc: this.cancelGeneration.bind(this),
         setMessageTextFunc: this.setMessageText.bind(this),
         responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this),
         setWelcomeMessageFunc: this.setWelcomeMessage.bind(this),
@@ -108,29 +107,6 @@ export class ChatComponent implements OnInit {
     // Creates the message object
     this.messages.push(new Message({uid: uid, type: 'recieved', content: '...'}));
     this.scrollToElement(uid);
-  }
-
-  cancelGeneration(uid : number, onError = false) : void {
-    // Stops the generation of the response
-    let message = this.getChatContentByUid(uid);
-
-    this.generatingResponse = false;
-
-    if (!message) {
-      return;
-    }
-    message.status = 'cancelled';
-    if(onError) {
-      message.content = 'Keine Verbindung zum Server';
-    } else {
-      message.content = 'Verarbeitung abgebrochen (Falls durch die Anfrage Änderungen vorgenommen wurden sind diese nicht zurückgesetzt)';
-    }
-  }
-
-  cancel() {
-    // Stops generation of response
-    this.generatingResponse = false;
-    ChatService.cancelResponseGeneration();
   }
 
   sendMessage() : void {

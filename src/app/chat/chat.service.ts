@@ -25,7 +25,6 @@ export class ChatService {
   public static registerCallbacks({
     setSentMessageFunc,
     initilizeRecievedMessageFunc,
-    cancelGenerationFunc,
     setMessageTextFunc,
     responseGenerationFinishedFunc,
     setWelcomeMessageFunc,
@@ -33,7 +32,6 @@ export class ChatService {
   }: {
     setSentMessageFunc: (uid: number, msg: string) => void;
     initilizeRecievedMessageFunc: (uid: number) => void;
-    cancelGenerationFunc: (uid: number, onError: boolean) => void;
     setMessageTextFunc: (uid: number, msg: string) => void;
     responseGenerationFinishedFunc: () => void;
     setWelcomeMessageFunc: (uid: number, msg: string) => void;
@@ -41,7 +39,6 @@ export class ChatService {
   }): void {
     this.setSentMessage = setSentMessageFunc;
     this.initilizeRecievedMessage = initilizeRecievedMessageFunc;
-    this.cancelGeneration = cancelGenerationFunc;
     this.setMessageText = setMessageTextFunc;
     this.responseGenerationFinished = responseGenerationFinishedFunc;
     this.setWelcomeMessage = setWelcomeMessageFunc;
@@ -52,45 +49,40 @@ export class ChatService {
     const uid = this.generateUid();
     const welcomeMsg = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
     this.setWelcomeMessage?.(uid, '');
-    this.displayResponse(uid, welcomeMsg);
+    this.displayRecievedMessage(uid, welcomeMsg);
   }
 
   public static setWelcomeMessageFunc(uid: number, msg: string): void {
     this.setWelcomeMessage?.(uid, msg);
-  } 
+  }
 
-  public static authenticate(value : any) {
-      let subscription: Subscription = this.aiRequestService.authenticate(value).subscribe({
-        next: (response) => {
-          if(response['success']) {
-            if (response['contextId']) {
-              this.aiRequestService.setContextId(response['contextId']);
-              switch(response['returnType']) {
-                case 'message':
-                  this.insertResponseMessage(response['response']);
-                  break;
-                case 'textfield':
-                  const textField : MessageModels.TextField = MessageModels.createTextField(
-                    response['element'],
-                    this.generateUid(),
-                    this.aiRequestService.submitElement
-                  );
-                  this.insertElementInChat(textField);
-                  break;
-              }
-            }
-          } else {
-            const authField = getAuthTextField((args) => this.authenticate(args));
-            authField.message = getAuthFailedMessage();
-            this.insertElementInChat(authField);
-          }
-          subscription.unsubscribe();
+  public static submitElement(data: any) {
+    let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
+      next: (response) => {
+        if (response['contextId']) {
+          this.aiRequestService.setContextId(response['contextId']);
         }
-      });
-    }
+
+        switch(response['returnType']) {
+          case 'message':
+            this.insertResponseMessage(response['content']);
+            break;
+          case 'textfield':
+            const textField : MessageModels.TextField = MessageModels.createTextField(
+              response['element'],
+              this.generateUid(),
+              this.submitElement.bind(this)
+            );
+            this.insertElementInChat(textField);
+            break;
+        }
+        subscription.unsubscribe();
+      }
+    });
+  }
 
   public static startAuthentication(): void {
-    ChatService.insertElementInChat(getAuthTextField((args) => this.authenticate(args)));
+    ChatService.insertElementInChat(getAuthTextField((data) => this.submitElement(data)));
   }
 
   public static insertElementInChat(element: any): number {
@@ -103,44 +95,26 @@ export class ChatService {
     this.isGenerating = true;
     this.setSentMessage?.(this.generateUid(), msg);
 
-    const uid = this.generateUid();
-    this.initilizeRecievedMessage?.(uid);
-    this.loadingAnimation(uid);
-
-    this.generateResponse(uid, msg);
+    this.submitElement(
+      {
+        'contentType': 'message',
+        'content': msg,
+      }
+    )
   }
 
   public static insertResponseMessage(msg: string): void {
     const uid = this.generateUid();
     this.initilizeRecievedMessage?.(uid);
-    this.displayResponse(uid, msg);
+    this.displayRecievedMessage(uid, msg);
 
-  }
-
-  public static cancelResponseGeneration(): void {
-    if (this.isGenerating && !this.shouldCancel) {
-      this.shouldCancel = true;
-    }
   }
 
   public static deleteChatContext(): void {
     this.aiRequestService.setContextId(null);
   }
 
-  private static async loadingAnimation(uid: number): Promise<void> {
-    let numDots = 1;
-    while (this.isGenerating) {
-      if (this.shouldCancel) {
-        this.cancelGeneration?.(uid, false);
-        return;
-      }
-      numDots = numDots > 3 ? 1 : numDots + 1;
-      this.setMessageText?.(uid, '...'.substring(0, numDots));
-      await new Promise(resolve => setTimeout(resolve, 300));
-    }
-  }
-
-  private static displayResponse(uid: number, msg: string): void {
+  private static displayRecievedMessage(uid: number, msg: string): void {
     let i = 0;
     let displayedText = '';
     const interval = setInterval(() => {
@@ -154,28 +128,6 @@ export class ChatService {
         i++;
       }
     }, 5);
-  }
-
-  private static generateResponse(uid: number, msg: string): void {
-    let subscription: Subscription = this.aiRequestService.sendChat(msg).subscribe({
-      next: (response) => {
-        if (!this.shouldCancel) {
-          if (!response || response['error']) {
-            this.cancelGeneration?.(uid, true);
-            this.isGenerating = false;
-            return;
-          }
-          this.displayResponse(uid, response['response']);
-          if (response['contextId']) {
-            this.aiRequestService.setContextId(response['contextId']);
-          }
-        } else {
-          this.shouldCancel = false;
-          this.isGenerating = false;
-        }
-        subscription.unsubscribe();
-      }
-    });
   }
 
   private static generateUid(): number {
