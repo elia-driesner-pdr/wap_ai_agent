@@ -32,6 +32,7 @@ export interface SingleTextFieldProps {
 
 interface TextFieldProps {
     uid: number;
+    actionId: string;
     onSubmit: (...args: any[]) => void;
     content: SingleTextFieldProps[]
     message?: string;
@@ -41,13 +42,15 @@ interface TextFieldProps {
 export class TextField {
     contentType: string = 'textfield';
     uid: number;
+    actionId: string;
     onSubmit: (...args: any[]) => void;
     content: SingleTextFieldProps[]
     message : string;
     status: string;
 
-    constructor({uid, onSubmit, content, message = '', status = 'normal'}: TextFieldProps) {
+    constructor({uid, actionId, onSubmit, content, message = '', status = 'normal'}: TextFieldProps) {
         this.uid = uid;
+        this.actionId = actionId;
         this.onSubmit = onSubmit;
         this.content = content;
         this.message = message;
@@ -124,6 +127,7 @@ export class BigButtons {
 export var exampleTextField = new TextField(
     {
       uid: 12407, 
+      actionId: 'AID47306591239',
       onSubmit: (uid: number, value: string) => {console.log('TextField submitted:', uid, value);}, 
       content: [
         {

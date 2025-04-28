@@ -74,7 +74,7 @@ export class ChatTextFieldComponent {
         this.data.onSubmit(this.renderedContent.map(
           (question: SingleTextFieldProps) => {
             return {
-              "identiefier": question.identifier, 
+              "identifier": question.identifier, 
               "value": question.value
             };
           }

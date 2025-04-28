@@ -4,6 +4,7 @@ export function getAuthTextField(onSubmitFunc : (textField: TextField) => void):
     var authTextField = new TextField(
         {
             uid: 0, 
+            actionId: 'AID47306599',
             onSubmit: onSubmitFunc, 
             content: [
               {
