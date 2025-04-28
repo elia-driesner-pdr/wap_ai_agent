@@ -16,9 +16,11 @@
     margin-bottom: 1rem;
     word-break: break-word;
     font-size: 1.3rem;
+}
 
+.fade-in {
     opacity: 0;
-    animation: fadeInAnimation 0.08s ease-out forwards;
+    animation: fadeInAnimation 0.3s ease-out forwards;
 }
 
 .message-text {

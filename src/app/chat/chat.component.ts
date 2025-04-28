@@ -43,7 +43,7 @@ export class ChatComponent implements OnInit {
         initilizeRecievedMessageFunc: this.initilizeRecievedMessage.bind(this),
         cancelGenerationFunc: this.cancelGeneration.bind(this),
         setMessageTextFunc: this.setMessageText.bind(this),
-        responseGenerationFinishedFunc: this.responseGenerationFinished.bind(this),
+        setResponseGenerationStateFunc: this.setResponseGenerationState.bind(this),
         setWelcomeMessageFunc: this.setWelcomeMessage.bind(this),
         displayElementInChatFunc: this.displayElementInChat.bind(this),
     });
@@ -60,8 +60,9 @@ export class ChatComponent implements OnInit {
     this.scrollToElement(245);
   }
 
-  responseGenerationFinished() {
-    this.generatingResponse = false;
+  setResponseGenerationState(state : boolean) {
+    // Sets the state of the response generation
+    this.generatingResponse = state;
   }
 
   getChatContentByUid(uid : number ) {
