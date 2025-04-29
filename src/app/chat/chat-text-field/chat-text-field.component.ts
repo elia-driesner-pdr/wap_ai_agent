@@ -43,9 +43,10 @@ export class ChatTextFieldComponent {
 
   focusNewestQuestion() {
     // Focus the newest input field
-    if (typeof document !== 'undefined') { // Only run this code in the browser
+    if (typeof document !== 'undefined' && this.submitted != true) { // Only run this code in the browser
       setTimeout(() => {
-        const input = document.getElementById('input' + this.questionIndex.toString()) as HTMLInputElement;
+        const input = document.getElementById('input' + this.data.uid.toString() + this.questionIndex.toString()) as HTMLInputElement;
+        console.log(input);
         input?.focus();
       }, 50);
     } 

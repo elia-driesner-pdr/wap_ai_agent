@@ -59,11 +59,12 @@ export class ChatService {
     this.setWelcomeMessage?.(uid, msg);
   }
 
-  public static submitElement(data: any) {
+  public static submitElement(data: any, element? : any) {
     this.setResponseGenerationState?.(true);
     let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
       next: (response) => {
         if (!response || response['error']) {
+          this.startAuthentication();
           this.cancelGeneration?.(true);
           this.isGenerating = false;
           return;
@@ -107,7 +108,10 @@ export class ChatService {
   }
 
   public static startAuthentication(): void {
-    ChatService.insertElementInChat(getAuthTextField((data) => this.submitElement(data)));
+    let authTextField = getAuthTextField();
+    authTextField.onSubmit = (data: any) => this.submitElement(data, authTextField);
+
+    ChatService.insertElementInChat(authTextField);
   }
 
   public static insertElementInChat(element: any): number {
@@ -122,11 +126,11 @@ export class ChatService {
     this.setSentMessage?.(this.generateUid(), msg);
 
     this.submitElement(
-      {
-        'contentType': 'message',
-        'content': msg,
-      }
-    )
+    {
+      'contentType': 'message',
+      'content': msg,
+    }
+  )
   }
 
   public static insertResponseMessage(msg: string): void {

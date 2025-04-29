@@ -1,11 +1,11 @@
 import { Message, TextField } from './message-types.model';
 
-export function getAuthTextField(onSubmitFunc : (data: any) => void): TextField {
+export function getAuthTextField(): TextField {
     var authTextField = new TextField(
         {
             uid: 0, 
             actionId: 'AID47306599',
-            onSubmit: onSubmitFunc, 
+            onSubmit: () => {}, 
             content: [
               {
                 'title': 'Bitte geben sie ihr Kennzeichen ein',
