@@ -79,6 +79,7 @@ export class ChatComponent implements OnInit {
   displaySentMessage(uid : number, msg : string) : void {
     // Displays the message sent by the user
     this.messages.push(new Message({uid: uid, type: 'sent', content: msg}));
+    this.scrollToElement(uid);
   }
 
   setMessageText(uid : number, msg : string) {
