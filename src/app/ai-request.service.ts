@@ -22,7 +22,7 @@ export class AiRequestService {
   public sendChat(prompt : string) : Observable<any> {
     const body = { 
       "prompt" : prompt,
-      "contextId": "CID47306599",
+      "contextId": this.contextId,
       "requestOrigin": "message"
     };
 
@@ -32,7 +32,7 @@ export class AiRequestService {
   public submitElement(data: any) : Observable<any> {
     const body = { 
       "data" : data.content,
-      "contextId": "CID47306599",
+      "contextId": this.contextId,
       "requestOrigin": data.contentType
     };
 
@@ -42,7 +42,7 @@ export class AiRequestService {
   public authenticate(data: any) : Observable<any> {
     const body = { 
       "data" : data,
-      "contextId": "CID47306599",
+      "contextId": this.contextId,
       "requestOrigin": "auth"
     };
 

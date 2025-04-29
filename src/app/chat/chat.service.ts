@@ -74,7 +74,7 @@ export class ChatService {
         }
         switch(response['returnType']) {
           case 'message':
-            this.insertResponseMessage(response['content']);
+            this.insertResponseMessage(response['element']);
             break;
           case 'textfield':
             const textField : MessageModels.TextField = MessageModels.createTextField(
