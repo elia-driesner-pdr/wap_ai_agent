@@ -30,7 +30,17 @@ export class ChatOptionButtonsComponent {
     // Calls the submit function and disables all buttons, hightlighting the selected one
     this.submitted = true;
     optionButton.status = 'selected';
-    this.data.onSubmit(optionButton.actionId);
+
+    const returnValue = {
+      
+    }
+    this.data.onSubmit({
+      'contentType': this.data.contentType,
+      'content': {
+        'actionId': optionButton.actionId,
+        'title': optionButton.title,
+      },
+    });
   }
 
   trackByFn(index: number): number {

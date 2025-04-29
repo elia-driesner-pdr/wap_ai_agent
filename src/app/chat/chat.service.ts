@@ -72,7 +72,6 @@ export class ChatService {
         if (response['contextId']) {
           this.aiRequestService.setContextId(response['contextId']);
         }
-
         switch(response['returnType']) {
           case 'message':
             this.insertResponseMessage(response['content']);
@@ -84,6 +83,14 @@ export class ChatService {
               this.submitElement.bind(this)
             );
             this.insertElementInChat(textField);
+            break;
+          case 'optionbuttons':
+            const optionButtons : MessageModels.OptionButtons = MessageModels.createOptionButtons(
+              response['element'],
+              this.generateUid(),
+              this.submitElement.bind(this)
+            );
+            this.insertElementInChat(optionButtons);
             break;
         }
         subscription.unsubscribe();

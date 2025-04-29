@@ -35,7 +35,6 @@ export class AiRequestService {
       "contextId": "CID47306599",
       "requestOrigin": data.contentType
     };
-    console.log(body);
 
     return this.sendRequest(body)
   }

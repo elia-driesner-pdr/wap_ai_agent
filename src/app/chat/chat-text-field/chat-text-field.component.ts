@@ -71,7 +71,7 @@ export class ChatTextFieldComponent {
       } else {
         // ALl questions are answered
         this.submitted = true;
-        let returnValue = this.renderedContent.map(
+        const returnValue = this.renderedContent.map(
           (question: SingleTextFieldProps) => {
             return {
               "identifier": question.identifier, 
@@ -81,6 +81,7 @@ export class ChatTextFieldComponent {
         );
         this.data.onSubmit({
           'contentType': this.data.contentType,
+          'actionId': this.data.actionId,
           'content': returnValue
         });
       }

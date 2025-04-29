@@ -1,6 +1,6 @@
 import { Message, TextField } from './message-types.model';
 
-export function getAuthTextField(onSubmitFunc : (textField: TextField) => void): TextField {
+export function getAuthTextField(onSubmitFunc : (data: any) => void): TextField {
     var authTextField = new TextField(
         {
             uid: 0, 

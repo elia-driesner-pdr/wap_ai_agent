@@ -103,7 +103,7 @@ export interface SingleOptionButtonProps {
 interface OptionButtonProps {
     uid: number;
     message: string;
-    onSubmit: (actionId: string) => void;
+    onSubmit: (...args: any[]) => void;
     buttons: SingleOptionButtonProps[];
     status?: string;
 }
@@ -112,7 +112,7 @@ export class OptionButtons {
     uid: number;
     contentType: string = 'optionbuttons';
     message: string;
-    onSubmit: (actionId: string) => void;
+    onSubmit: (...args: any[]) => void;
     buttons: SingleOptionButtonProps[];
     status: string;
 
@@ -123,6 +123,22 @@ export class OptionButtons {
         this.buttons = buttons;
         this.status = status;
     }
+}
+
+export function createOptionButtons(element: any, uid: number, onSubmit: (...args: any[]) => void): OptionButtons {
+    const buttons: SingleOptionButtonProps[] = element.buttons.map((item: any) => ({
+        title: item.title,
+        actionId: item.actionId,
+        status: item.status ?? 'normal',
+    }));
+
+    return new OptionButtons({
+        uid,
+        message: element.message ?? '',
+        onSubmit,
+        buttons,
+        status: 'normal'
+    });
 }
 
 // Big Buttons
