@@ -92,7 +92,15 @@ export class ChatService {
             );
             this.insertElementInChat(optionButtons);
             break;
-        }
+          case 'bigbuttons':
+            const bigButtons : MessageModels.OptionButtons = MessageModels.createBigButtons(
+              response['element'],
+              this.generateUid(),
+              this.submitElement.bind(this)
+            );
+            this.insertElementInChat(bigButtons);
+            break;
+      }
         subscription.unsubscribe();
       }
     });

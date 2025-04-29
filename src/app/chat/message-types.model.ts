@@ -153,7 +153,7 @@ export interface SingleBigButtonProps {
 interface BigButtonProps {
     uid: number;
     message: string;
-    onSubmit: (actionId: string) => void;
+    onSubmit: (...args: any[]) => void;
     buttons: SingleBigButtonProps[];
     status?: string;
 }
@@ -162,7 +162,7 @@ export class BigButtons {
     uid: number;
     contentType: string = 'bigbuttons';
     message: string;
-    onSubmit: (actionId: string) => void;
+    onSubmit: (...args: any[]) => void;
     buttons: SingleBigButtonProps[];
     status: string;
 
@@ -174,6 +174,25 @@ export class BigButtons {
         this.status = status;
     }
 }
+
+export function createBigButtons(element: any, uid: number, onSubmit: (...args: any[]) => void): BigButtons {
+    const buttons: SingleBigButtonProps[] = element.buttons.map((item: any) => ({
+        title: item.title,
+        description: item.description,
+        actionId: item.actionId,
+        icon: item.icon ?? '',
+        status: item.status ?? 'normal',
+    }));
+
+    return new BigButtons({
+        uid,
+        message: element.message ?? '',
+        onSubmit,
+        buttons,
+        status: 'normal'
+    });
+}
+
 
 export var exampleTextField = new TextField(
     {

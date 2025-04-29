@@ -34,7 +34,14 @@ export class ChatBigButtonsComponent {
     // Calls the submit function and disables all buttons, hightlighting the selected one
     this.submitted = true;
     bigButton.status = 'selected';
-    this.data.onSubmit(bigButton.actionId);
+
+    this.data.onSubmit({
+      'contentType': this.data.contentType,
+      'content': {
+        'actionId': bigButton.actionId,
+        'title': bigButton.title,
+      },
+    });
   }
 
   trackByFn(index: number): number {

@@ -31,9 +31,6 @@ export class ChatOptionButtonsComponent {
     this.submitted = true;
     optionButton.status = 'selected';
 
-    const returnValue = {
-      
-    }
     this.data.onSubmit({
       'contentType': this.data.contentType,
       'content': {
