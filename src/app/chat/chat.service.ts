@@ -80,14 +80,15 @@ export class ChatService {
     let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
       next: (response) => {
         if (!response || response['error']) { // Handle error
+          // Stops loading, displays error message
+          this.cancelGeneration?.(true);
+          this.isGenerating = false;
+          
           // If element should be displayed again, do so
           if(element) {
             let newElement = this.cloneInstance(element);
             this.insertElementInChat(newElement);
           }
-          // Stops loading, displays error message
-          this.cancelGeneration?.(true);
-          this.isGenerating = false;
           return;
         }
 
