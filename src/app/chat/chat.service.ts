@@ -59,55 +59,81 @@ export class ChatService {
     this.setWelcomeMessage?.(uid, msg);
   }
 
+  private static cloneInstance<T>(instance: any): any {
+    // Create exact copy of instance, if not copied error accurs in TextField
+    let onSub = instance.onSubmit;
+    instance.onSubmit = null;
+    const copy = Object.assign(
+      Object.create(Object.getPrototypeOf(instance)),
+      structuredClone(instance) // tiefe Kopie der Daten
+    );
+    instance.onSubmit = onSub;
+    copy.onSubmit = onSub;
+    copy.uid = this.generateUid();
+    return copy;
+  }
+
   public static submitElement(data: any, element? : any) {
-    this.setResponseGenerationState?.(true);
+    // Handle the return of the workflow
+    this.setResponseGenerationState?.(true); // Displays loading animation
+
     let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
       next: (response) => {
-        if (!response || response['error']) {
-          this.startAuthentication();
+        if (!response || response['error']) { // Handle error
+          // If element should be displayed again, do so
+          if(element) {
+            let newElement = this.cloneInstance(element);
+            this.insertElementInChat(newElement);
+          }
+          // Stops loading, displays error message
           this.cancelGeneration?.(true);
           this.isGenerating = false;
           return;
         }
+
+        // Stops loading, displays the response
         this.setResponseGenerationState?.(false);
         if (response['contextId']) {
           this.aiRequestService.setContextId(response['contextId']);
         }
+
+        // Assigns the response to the correct element type
+        let responseElement = response['element'];
         switch(response['returnType']) {
           case 'message':
-            this.insertResponseMessage(response['element']);
+            responseElement = response['element'];
             break;
           case 'textfield':
-            const textField : MessageModels.TextField = MessageModels.createTextField(
+            responseElement = MessageModels.createTextField(
               response['element'],
               this.generateUid(),
-              this.submitElement.bind(this)
             );
-            this.insertElementInChat(textField);
             break;
           case 'optionbuttons':
-            const optionButtons : MessageModels.OptionButtons = MessageModels.createOptionButtons(
+            responseElement = MessageModels.createOptionButtons(
               response['element'],
               this.generateUid(),
-              this.submitElement.bind(this)
             );
-            this.insertElementInChat(optionButtons);
             break;
           case 'bigbuttons':
-            const bigButtons : MessageModels.OptionButtons = MessageModels.createBigButtons(
+            responseElement = MessageModels.createBigButtons(
               response['element'],
               this.generateUid(),
-              this.submitElement.bind(this)
             );
-            this.insertElementInChat(bigButtons);
             break;
-      }
+        }
+        // If its not a message, re render it on error
+        if(response['returnType'] != 'message') {
+          responseElement.onSubmit = (data: any) => this.submitElement(data, responseElement);
+        }
+        this.insertElementInChat(responseElement);
         subscription.unsubscribe();
       }
     });
   }
 
   public static startAuthentication(): void {
+    // Displays the authentication text field
     let authTextField = getAuthTextField();
     authTextField.onSubmit = (data: any) => this.submitElement(data, authTextField);
 
@@ -115,6 +141,7 @@ export class ChatService {
   }
 
   public static insertElementInChat(element: any): number {
+    // Displays the element in the chat
     const uid = this.generateUid();
     element.uid = uid;
     this.displayElementInChat?.(uid, element);
@@ -122,6 +149,7 @@ export class ChatService {
   }
 
   public static sendMessage(msg: string): void {
+    // Handles input from the text field
     this.isGenerating = true;
     this.setSentMessage?.(this.generateUid(), msg);
 
@@ -134,6 +162,7 @@ export class ChatService {
   }
 
   public static insertResponseMessage(msg: string): void {
+    // Displays the response message in the chat
     const uid = this.generateUid();
     this.initilizeRecievedMessage?.(uid);
     this.displayRecievedMessage(uid, msg);
@@ -141,10 +170,12 @@ export class ChatService {
   }
 
   public static deleteChatContext(): void {
+    // Delete context id
     this.aiRequestService.setContextId(null);
   }
 
   private static displayRecievedMessage(uid: number, msg: string): void {
+    // Writes the message in a typewriter style
     let i = 0;
     let displayedText = '';
     this.setResponseGenerationState?.(false);
@@ -161,6 +192,7 @@ export class ChatService {
   }
 
   private static generateUid(): number {
+    // Generates a unique id
     return Math.floor(Math.random() * 100000000);
   }
 }

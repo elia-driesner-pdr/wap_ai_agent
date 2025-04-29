@@ -75,7 +75,7 @@ export class TextField {
     }
 }
 
-export function createTextField(element: any, uid: number, onSubmit: (...args: any[]) => void): TextField {
+export function createTextField(element: any, uid: number): TextField {
     const content: SingleTextFieldProps[] = element.content.map((item: any) => ({
         title: item.title,
         identifier: item.identifier,
@@ -85,7 +85,7 @@ export function createTextField(element: any, uid: number, onSubmit: (...args: a
     return new TextField({
         uid,
         actionId: element.actionId,
-        onSubmit,
+        onSubmit: () => {},
         content,
         message: element.message ?? '',
         status: 'normal'
@@ -125,7 +125,7 @@ export class OptionButtons {
     }
 }
 
-export function createOptionButtons(element: any, uid: number, onSubmit: (...args: any[]) => void): OptionButtons {
+export function createOptionButtons(element: any, uid: number): OptionButtons {
     const buttons: SingleOptionButtonProps[] = element.buttons.map((item: any) => ({
         title: item.title,
         actionId: item.actionId,
@@ -135,7 +135,7 @@ export function createOptionButtons(element: any, uid: number, onSubmit: (...arg
     return new OptionButtons({
         uid,
         message: element.message ?? '',
-        onSubmit,
+        onSubmit: () => {},
         buttons,
         status: 'normal'
     });
@@ -175,7 +175,7 @@ export class BigButtons {
     }
 }
 
-export function createBigButtons(element: any, uid: number, onSubmit: (...args: any[]) => void): BigButtons {
+export function createBigButtons(element: any, uid: number): BigButtons {
     const buttons: SingleBigButtonProps[] = element.buttons.map((item: any) => ({
         title: item.title,
         description: item.description,
@@ -187,7 +187,7 @@ export function createBigButtons(element: any, uid: number, onSubmit: (...args: 
     return new BigButtons({
         uid,
         message: element.message ?? '',
-        onSubmit,
+        onSubmit: () => {},
         buttons,
         status: 'normal'
     });

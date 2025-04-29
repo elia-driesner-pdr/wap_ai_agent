@@ -37,7 +37,6 @@ export class ChatTextFieldComponent {
   ngAfterViewInit() {
     // Focus the first question input field after the view has been initialized
     this.focusNewestQuestion();
-
   }
 
 
@@ -46,7 +45,6 @@ export class ChatTextFieldComponent {
     if (typeof document !== 'undefined' && this.submitted != true) { // Only run this code in the browser
       setTimeout(() => {
         const input = document.getElementById('input' + this.data.uid.toString() + this.questionIndex.toString()) as HTMLInputElement;
-        console.log(input);
         input?.focus();
       }, 50);
     } 
