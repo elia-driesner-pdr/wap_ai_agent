@@ -1,0 +1,143 @@
+{
+    "branch": {
+        "id": 1,
+        "alias": "PDR-Team Deutschland"
+    },
+    "contact": {
+        "tel": "0800 308 1234",
+        "email": "info@pdr-team.de"
+    },
+    "callCenterCalendar": {
+        "id": 3,
+        "name": "Call Center Deutschland"
+    },
+    "case": {
+        "caseNumber": "TEST-AL3",
+        "status": {
+            "name": "AWAITING_ASSESSMENT_APPOINTMENT",
+            "data": {
+                "id": 544312,
+                "startTime": "2025-05-07T07:00:00.000Z",
+                "endTime": "2025-05-07T07:30:00.000Z",
+                "stationId": 2782,
+                "timeZoneId": "Europe/Berlin",
+                "stationAlias": "Station Veilsdorf Allianz",
+                "stationFullAddress": "Bahnhofstraße 97, 98669 Veilsdorf"
+            }
+        },
+        "car": {
+            "licensePlate": "TEST-AL3",
+            "manufacturer": "Opel S-D (ADAM-S 1.4)",
+            "model": "",
+            "mileage": 112000
+        },
+        "contact": {
+            "id": 245184,
+            "key_language_id": 3,
+            "fullname": "TEST AL3",
+            "client_number": "",
+            "comment": null,
+            "created_by": 1873,
+            "modified_by": 0,
+            "name_suffix": "",
+            "has_no_valid_digital_data": false,
+            "date_created": "2024-06-21T15:59:47.000Z",
+            "date_modified": "2025-04-16T08:13:10.000Z",
+            "key_title_id": 1,
+            "key_title": {
+                "id": 1,
+                "title_text_id": 517,
+                "address_text_id": 1951
+            },
+            "person": {
+                "fullname": "TEST AL3",
+                "id": 188020,
+                "firstname": "TEST",
+                "middlename": "",
+                "lastname": "AL3",
+                "created_by": 1873,
+                "modified_by": 14,
+                "vat_id_number": "",
+                "tax_number": "",
+                "tax_registration_number": "",
+                "liability_insurance_number": "",
+                "date_created": "2024-06-21T15:59:47.000Z",
+                "date_modified": "2025-04-16T08:13:10.000Z",
+                "address_id": 230773,
+                "contact_id": 245184,
+                "address": {
+                    "id": 230773,
+                    "street": "Bürdener Str. 294",
+                    "postcode": "98669",
+                    "longitude": 10.8049889,
+                    "latitude": 50.4186043,
+                    "created_by": 1000,
+                    "modified_by": 1000,
+                    "date_created": "2024-06-21T15:59:47.000Z",
+                    "date_modified": "2025-04-16T08:13:10.000Z",
+                    "state_id": null,
+                    "city_id": 147676,
+                    "city": {
+                        "id": 147676,
+                        "city_name": "Veilsdorf",
+                        "key_country_id": 41,
+                        "created_by": 1000,
+                        "modified_by": 1000,
+                        "date_created": "2024-06-21T15:59:47.000Z",
+                        "date_modified": "2025-04-16T08:13:10.000Z"
+                    },
+                    "state": null
+                }
+            },
+            "company": null,
+            "contact_details": [
+                {
+                    "id": 223636,
+                    "landline": "",
+                    "mobile": "015906172281",
+                    "fax": "",
+                    "email": "tobias.loewen@pdr-team.de",
+                    "is_main": 1,
+                    "created_by": 1873,
+                    "modified_by": 0,
+                    "date_created": "2024-06-21T15:59:47.000Z",
+                    "date_modified": "2025-04-16T08:13:10.000Z",
+                    "contact_id": 245184,
+                    "contact_person_id": null,
+                    "key_contact_type_id": null,
+                    "key_contact_type": null,
+                    "contact_person": null
+                }
+            ],
+            "is_employee_of": null
+        },
+        "notifications": {
+            "selectedType": {
+                "id": 1,
+                "textId": 529
+            },
+            "types": [
+                {
+                    "id": 1,
+                    "textId": 529
+                },
+                {
+                    "id": 2,
+                    "textId": 1188
+                },
+                {
+                    "id": 3,
+                    "textId": 1372
+                }
+            ]
+        },
+        "documents": [],
+        "userTasks": {
+            "type": "generali",
+            "mainTask": "taskUsrEditContactData",
+            "secondaryTasks": [
+                "taskUsrRebookExpertiseAppointment"
+            ]
+        }
+    }
+}

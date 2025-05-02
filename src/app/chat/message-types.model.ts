@@ -183,7 +183,7 @@ export function createBigButtons(element: any, uid: number): BigButtons {
         icon: item.icon ?? '',
         status: item.status ?? 'normal',
     }));
-
+    
     return new BigButtons({
         uid,
         message: element.message ?? '',

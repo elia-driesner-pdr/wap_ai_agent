@@ -79,6 +79,7 @@ export class ChatService {
 
     let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
       next: (response) => {
+        console.log('Response:', response);
         if (!response || response['error']) { // Handle error
           // Stops loading, displays error message
           this.cancelGeneration?.(true);
@@ -126,6 +127,9 @@ export class ChatService {
         // If its not a message, re render it on error
         if(response['returnType'] != 'message') {
           responseElement.onSubmit = (data: any) => this.submitElement(data, responseElement);
+          if(responseElement.message) {
+            this.insertResponseMessage(responseElement.message);
+          }
         }
         this.insertElementInChat(responseElement);
         subscription.unsubscribe();
