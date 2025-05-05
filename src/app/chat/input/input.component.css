@@ -1,0 +1,10 @@
+.text-field{
+    height: 4vh;
+    font-size: 1.5rem;
+    border-radius: 25px;
+}
+
+.send-button {
+    font-size: 1.7rem;
+    border-radius: 20px;
+}

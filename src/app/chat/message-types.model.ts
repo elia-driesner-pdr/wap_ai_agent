@@ -234,16 +234,16 @@ export var exampleBigButtons = new BigButtons(
         onSubmit: (actionId: string) => {console.log('OptionButton submitted:', actionId);},
         buttons: [
             { 
-            title: 'Termin buchen', 
-            description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
-            actionId: 'buchen',
-            icon: 'bi bi-calendar3'
+                title: 'Termin buchen', 
+                description: 'Ich unterstützde dich gerne bei der Buchen eines Termins' , 
+                actionId: 'buchen',
+                icon: 'bi bi-calendar3'
             },
             { 
-            title: 'Fragen beantworten', 
-            description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
-            actionId: 'fragen',
-            icon: 'bi bi-info-square-fill'
+                title: 'Fragen beantworten', 
+                description: 'Ich kann Fragen über PDR Team, unsere Prozesse und deinen Fall beantworten', 
+                actionId: 'fragen',
+                icon: 'bi bi-info-square-fill'
             },
         ],
     }

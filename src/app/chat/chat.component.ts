@@ -11,7 +11,7 @@ import { ChatTextFieldComponent } from './chat-text-field/chat-text-field.compon
 import { ChatOptionButtonsComponent } from './chat-option-buttons/chat-option-buttons.component';
 import { ChatBigButtonsComponent } from "./chat-big-buttons/chat-big-buttons.component";
 import { BigButtons, exampleBigButtons, exampleOptionButtons, exampleTextField, Message, OptionButtons, TextField, ErrorMessage } from './message-types.model';
-import { Subscription } from 'rxjs';
+import { InputComponent } from './input/input.component';
 
 @Component({
   selector: 'app-chat',
@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
     ChatTextFieldComponent,
     ChatOptionButtonsComponent,
     ChatBigButtonsComponent,
+    InputComponent,
     NgIf
 ],
   templateUrl: './chat.component.html',

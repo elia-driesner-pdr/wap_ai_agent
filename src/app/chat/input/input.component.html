@@ -1,0 +1,18 @@
+<form class="start-0 end-0 p-3" style="bottom: 10vh;" (submit)="sendMessage()">
+  <div class="input-group container">
+      <textarea 
+        #textarea
+        type="text" 
+        class="form-control form-control-lg shadow text-field" 
+        name="prompt"
+        placeholder="Nachricht"
+        autocomplete="off"
+        [(ngModel)]="textFieldValue"
+        (input)="autoGrow();"
+        rows="1"
+      ></textarea>
+      <button class="btn btn-dark col-1 shadow send-button" type="submit">
+        <i class="fa fa-arrow-up"></i>
+    </button> 
+  </div>
+</form>
