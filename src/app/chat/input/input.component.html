@@ -9,10 +9,17 @@
         autocomplete="off"
         [(ngModel)]="textFieldValue"
         (input)="autoGrow();"
+        (keydown)="onEnter($event)"
         rows="1"
       ></textarea>
-      <button class="btn btn-dark col-1 shadow send-button" type="submit">
-        <i class="fa fa-arrow-up"></i>
-    </button> 
+      @if (!generatingResponse) {
+        <button class="btn btn-dark col-1 shadow send-button" type="submit">
+            <i class="fa fa-arrow-up"></i>
+        </button> 
+      } @else { 
+        <button class="btn btn-dark col-1 shadow send-button" type="button" (click)="cancel();  $event.preventDefault()">
+            <i class="fa fa-stop"></i>
+        </button>
+      }
   </div>
 </form>

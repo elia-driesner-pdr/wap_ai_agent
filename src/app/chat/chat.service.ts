@@ -15,6 +15,8 @@ export class ChatService {
   private static setWelcomeMessage?: (uid: number, msg: string) => void;
   private static displayElementInChat?: (uid: number, msg: any) => void;
 
+  private static inputSetGeneratingResponse?: (value: boolean) => void;
+
   private static isGenerating: boolean = false;
   private static shouldCancel: boolean = false;
 
@@ -48,6 +50,14 @@ export class ChatService {
     this.displayElementInChat = displayElementInChatFunc;
   }
 
+  public static registerInputCallbacks({
+    inputSetGeneratingResponseFunc,
+  }: {
+    inputSetGeneratingResponseFunc: (value: boolean) => void;
+  }): void {
+    this.inputSetGeneratingResponse = inputSetGeneratingResponseFunc;
+  }
+
   public static showWelcomeMessage(): void {
     const uid = this.generateUid();
     const welcomeMsg = 'Hallo, ich bin ein Chatbot von PDR Team. Ich kann dir gerne Auskunft über uns oder deinen Fall geben.';
@@ -76,6 +86,7 @@ export class ChatService {
   public static submitElement(data: any, element? : any) {
     // Handle the return of the workflow
     this.setResponseGenerationState?.(true); // Displays loading animation
+    this.inputSetGeneratingResponse?.(true);
 
     let subscription: Subscription = this.aiRequestService.submitElement(data).subscribe({
       next: (response) => {
@@ -95,6 +106,7 @@ export class ChatService {
 
         // Stops loading, displays the response
         this.setResponseGenerationState?.(false);
+        this.inputSetGeneratingResponse?.(false);
         if (response['contextId']) {
           this.aiRequestService.setContextId(response['contextId']);
         }
@@ -130,8 +142,10 @@ export class ChatService {
           if(responseElement.message) {
             this.insertResponseMessage(responseElement.message);
           }
+          this.insertElementInChat(responseElement);
+        } else {
+          this.insertResponseMessage(responseElement);
         }
-        this.insertElementInChat(responseElement);
         subscription.unsubscribe();
       }
     });
@@ -184,6 +198,7 @@ export class ChatService {
     let i = 0;
     let displayedText = '';
     this.setResponseGenerationState?.(false);
+    this.inputSetGeneratingResponse?.(false);
     const interval = setInterval(() => {
       if (i >= msg.length || this.shouldCancel) {
         clearInterval(interval);
