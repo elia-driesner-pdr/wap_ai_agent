@@ -1,5 +1,5 @@
 {
   "routes": {
-    "/[repo-name]": {}
+    "/wap_ai_agent": {}
   }
 }

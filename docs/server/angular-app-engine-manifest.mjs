@@ -1,6 +1,6 @@
 
 export default {
-  basePath: '/[repo-name]',
+  basePath: '/wap_ai_agent',
   supportedLocales: {
   "en-US": ""
 },

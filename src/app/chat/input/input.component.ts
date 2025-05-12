@@ -48,10 +48,9 @@ export class InputComponent {
   }
 
   onEnter(event: KeyboardEvent) {
-    // Only submit if Shift is *not* pressed
     const keyboardEvent = event as KeyboardEvent;
 
-    if (keyboardEvent.key === 'Enter' && !keyboardEvent.shiftKey) {
+    if (keyboardEvent.key === 'Enter') {
       keyboardEvent.preventDefault();  // Prevent newline
       this.sendMessage();              // Submit form
     }
