@@ -1,6 +1,7 @@
 <form class="start-0 end-0 p-3" style="bottom: 10vh;" (submit)="sendMessage()">
   <div class="input-group container">
-      <textarea 
+      <textarea
+        disabled="{{ disableInput }}"
         #textarea
         type="text" 
         class="form-control form-control-lg shadow text-field" 
@@ -13,11 +14,18 @@
         rows="1"
       ></textarea>
       @if (!generatingResponse) {
-        <button class="btn btn-dark col-1 shadow send-button" type="submit">
+        <button 
+          class="btn btn-dark col-1 shadow send-button" 
+          type="submit" 
+          [disabled]="disableInput">
             <i class="fa fa-arrow-up"></i>
         </button> 
       } @else { 
-        <button class="btn btn-dark col-1 shadow send-button" type="button" (click)="cancel();  $event.preventDefault()">
+        <button 
+          class="btn btn-dark col-1 shadow send-button" 
+          type="button" 
+          [disabled]="disableInput"
+          (click)="cancel(); $event.preventDefault()">
             <i class="fa fa-stop"></i>
         </button>
       }

@@ -16,6 +16,7 @@ export class ChatService {
   private static displayElementInChat?: (uid: number, msg: any) => void;
 
   private static inputSetGeneratingResponse?: (value: boolean) => void;
+  public static setDisableInput?: (value: boolean) => void;
 
   private static isGenerating: boolean = false;
   private static shouldCancel: boolean = false;
@@ -52,10 +53,13 @@ export class ChatService {
 
   public static registerInputCallbacks({
     inputSetGeneratingResponseFunc,
+    setDisableInputFunc
   }: {
     inputSetGeneratingResponseFunc: (value: boolean) => void;
+    setDisableInputFunc: (value: boolean) => void;
   }): void {
     this.inputSetGeneratingResponse = inputSetGeneratingResponseFunc;
+    this.setDisableInput = setDisableInputFunc;
   }
 
   public static showWelcomeMessage(): void {
@@ -95,7 +99,8 @@ export class ChatService {
           // Stops loading, displays error message
           this.cancelGeneration?.(true);
           this.isGenerating = false;
-          
+          this.setResponseGenerationState?.(false);
+          this.inputSetGeneratingResponse?.(false);
           // If element should be displayed again, do so
           if(element) {
             let newElement = this.cloneInstance(element);
@@ -135,6 +140,12 @@ export class ChatService {
               this.generateUid(),
             );
             break;
+        }
+        console.log('Response element:', responseElement);
+        if(response['disableInput']) {
+          this.setDisableInput?.(true);
+        } else {
+          this.setDisableInput?.(false);
         }
         // If its not a message, re render it on error
         if(response['returnType'] != 'message') {

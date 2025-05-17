@@ -8,3 +8,10 @@
     font-size: 1.7rem;
     border-radius: 20px;
 }
+
+.text-field:disabled {
+  background-color: #ebebeb;
+  color: #888;
+  border: 1px dashed #ccc;
+  cursor: not-allowed;
+}

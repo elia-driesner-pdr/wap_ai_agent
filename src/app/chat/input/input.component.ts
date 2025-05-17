@@ -14,12 +14,14 @@ import { ChatService } from '../chat.service';
 export class InputComponent {
   textFieldValue: string = '';
   generatingResponse: boolean = false;
+  disableInput: boolean = false;
 
   @ViewChild('textarea') textareaRef!: ElementRef<HTMLTextAreaElement>;
 
   ngOnInit(): void {
     ChatService.registerInputCallbacks({
       inputSetGeneratingResponseFunc: this.setGeneratingResponse.bind(this),
+      setDisableInputFunc: this.setDisableInput.bind(this),
     });
   }
 
@@ -32,6 +34,10 @@ export class InputComponent {
   setGeneratingResponse(value: boolean): void {
     this.generatingResponse = value;
     console.log(value);
+  }
+
+  setDisableInput(value: boolean): void {
+    this.disableInput = value;
   }
 
   cancel(): void {
